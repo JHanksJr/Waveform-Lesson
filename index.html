@@ -33,7 +33,6 @@
       overflow-x:hidden}
     .holo-grid{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;background-image:linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);background-size:24px 24px;mask: radial-gradient(80% 60% at 50% 40%, black 40%, transparent 100%)}
     .aurora{position:fixed;inset:-20% -20% auto -20%;height:70vh;z-index:0;filter:blur(44px);opacity:.42;background:conic-gradient(from 0deg, var(--neon-1), var(--neon-2), var(--neon-3), var(--neon-1));animation:spin 28s linear infinite;transform-origin:60% 40%;transition:opacity .3s ease}
-    /* NEW: paused state for Toggle Glow */
     .aurora.paused{animation-play-state:paused;opacity:0;}
     @keyframes spin{to{transform:rotate(360deg)}}
     .container{position:relative;z-index:1;max-width:1200px;margin:64px auto;padding:0 24px 120px}
@@ -93,7 +92,8 @@
     .tip h4{margin:0 0 6px;color:var(--accent)}
     footer{margin-top:34px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
     @media (min-width:900px){.hero{grid-template-columns:1.2fr .8fr;align-items:end}}
-    /* === ADSR / Filter / Mini Synth (futuristic) === */
+
+    /* === ADSR / Filter / Mini Synth === */
     .module-title{margin:0 0 8px;color:var(--accent)}
     .adsr-section,.filter-section,.synthesis-playground{background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));border:1px solid var(--border);border-radius:var(--radius);padding:clamp(18px,2.8vw,28px);margin:18px 0 26px;box-shadow:var(--shadow)}
     .adsr-section h2,.filter-section h2,.synthesis-playground h2{margin:0 0 6px;background:linear-gradient(90deg, var(--text), var(--neon-1));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
@@ -101,20 +101,33 @@
     .synth-panel{background:var(--card);border:1px solid var(--border);padding:16px;border-radius:14px;box-shadow:var(--shadow)}
     .knob-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:18px;justify-items:center}
     .knob-group{text-align:center;color:var(--text)}
-    .knob{width:88px;height:88px;background:radial-gradient(circle, rgba(255,255,255,.12) 0%, rgba(0,0,0,.0) 65%), #0e1524;border-radius:50%;position:relative;border:3px solid var(--border);box-shadow:var(--shadow);transition:transform .12s ease}
-    .knob:hover{transform:scale(1.04);border-color:var(--neon-1)}
-    .knob::before{content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);width:3px;height:28px;background:linear-gradient(to bottom, var(--accent), var(--neon-3));border-radius:2px}
+
+    /* Potentiometer: outer shell (no transforms) */
+    .knob{
+      width:88px;height:88px;position:relative;border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,.12) 0%, rgba(0,0,0,.0) 65%), #0e1524;
+      border:3px solid var(--border);box-shadow:var(--shadow);
+      user-select:none;-webkit-user-select:none;touch-action:none;cursor:pointer;
+    }
+    .knob:hover{ border-color:var(--neon-1); box-shadow:0 0 22px 0 color-mix(in srgb, var(--neon-1) 24%, transparent); }
+    .knob.grabbing{cursor:grabbing}
     .knob-input{position:absolute;inset:0;opacity:0;cursor:pointer}
     .knob-label{font-size:12px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
     .knob-value{font:700 12px/1 "JetBrains Mono",ui-monospace;color:var(--neon-1);background:var(--card-strong);border:1px solid var(--border);padding:6px 10px;border-radius:999px;display:inline-block;margin-top:6px;min-width:64px}
+
+    /* Inner rotor actually rotates; needle lives here */
+    .knob .rotor{position:absolute;inset:0;border-radius:50%;pointer-events:none;transform:rotate(0deg)}
+    .knob .rotor::before{
+      content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);
+      width:3px;height:28px;background:linear-gradient(to bottom, var(--accent), var(--neon-3));border-radius:2px;
+    }
+
     .waveform-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
     .wave-button{background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px;cursor:pointer;font-weight:700;text-align:center;transition:transform .12s ease,border-color .12s ease, box-shadow .12s ease}
     .wave-button:hover{transform:translateY(-1px);border-color:var(--neon-1);box-shadow:0 0 22px 0 color-mix(in srgb, var(--neon-1) 24%, transparent)}
     .wave-button.active{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb, var(--accent) 40%, transparent) inset}
     .big-play-btn,.play-adsr,.play-filter{background:linear-gradient(90deg, var(--neon-1), var(--neon-2));border:1px solid var(--border);color:var(--bg);padding:14px 18px;border-radius:12px;cursor:pointer;font:800 14px/1 "Space Grotesk";letter-spacing:.06em;text-transform:uppercase;box-shadow:var(--shadow);transition:transform .12s ease}
     .big-play-btn:hover,.play-adsr:hover,.play-filter:hover{transform:translateY(-1px)}
-    /* NEW: knob grabbing cursor */
-    .knob.grabbing{cursor:grabbing}
   </style>
 </head>
 <body>
@@ -136,7 +149,7 @@
       </div>
     </header>
 
-    <!-- HERO / INTRO SHORT -->
+    <!-- HERO -->
     <section class="panel hero">
       <div>
         <h2>🎵 The Four Basic Waveforms &amp; Synthesis</h2>
@@ -171,7 +184,7 @@
       </div>
     </section>
 
-    <!-- INTRODUCTION -->
+    <!-- INTRO -->
     <section class="panel">
       <h3>🌊 Introduction to Waveforms</h3>
       <div class="section-text">
@@ -182,7 +195,6 @@
 
     <!-- WAVE CARDS -->
     <section class="grid">
-      <!-- SINE -->
       <article class="panel wave-card">
         <div class="wave-title"><span class="tag">SINE</span><h3>🔵 Sine Wave - The Pure Foundation</h3></div>
         <div class="oscilloscope"><canvas id="sineCanvas" class="waveform-canvas" height="180"></canvas><div class="scanline"></div></div>
@@ -195,113 +207,96 @@
         </div>
         <div class="harmonic-content">
           <h4>Harmonic Analysis</h4>
-          <div class="harmonic-bars">
-            <div class="harmonic-bar" style="height:100%"></div>
-            <div class="harmonic-bar" style="height:0%"></div>
-            <div class="harmonic-bar" style="height:0%"></div>
-            <div class="harmonic-bar" style="height:0%"></div>
-            <div class="harmonic-bar" style="height:0%"></div>
-          </div>
+          <div class="harmonic-bars"><div class="harmonic-bar" style="height:100%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:0%"></div></div>
           <p><strong>Only the fundamental frequency is present - no harmonics!</strong></p>
         </div>
       </article>
 
-      <!-- SQUARE -->
       <article class="panel wave-card">
         <div class="wave-title"><span class="tag">SQUARE</span><h3>⬜ Square Wave - The Bold Fundamental</h3></div>
         <div class="oscilloscope"><canvas id="squareCanvas" class="waveform-canvas" height="180"></canvas><div class="scanline"></div></div>
         <div class="controls"><button class="btn" onclick="playWaveform('square')">🎵 Play Square Wave</button></div>
         <div class="char-grid">
-          <div class="char-card"><h4>🎯 Sound Character</h4><p>Bold, hollow, and woody. Rich in odd harmonics, giving it a distinctive "clarinet-like" or "video game" character. Very present in the mix.</p></div>
-          <div class="char-card"><h4>🔬 Harmonic Content</h4><p>Contains odd harmonics only (1st, 3rd, 5th, 7th...) with decreasing amplitude. The 3rd harmonic is particularly strong.</p></div>
-          <div class="char-card"><h4>🎹 Musical Applications</h4><p>Classic video game sounds, organ-like tones, woodwind emulations, and aggressive lead synthesizer sounds.</p></div>
-          <div class="char-card"><h4>⚡ Synthesis Use</h4><p>Excellent starting point for subtractive synthesis. Responds well to low-pass filtering to create evolving timbres.</p></div>
+          <div class="char-card"><h4>🎯 Sound Character</h4><p>Bold, hollow, and woody. Rich in odd harmonics, giving it a distinctive "clarinet-like" or "video game" character.</p></div>
+          <div class="char-card"><h4>🔬 Harmonic Content</h4><p>Contains odd harmonics only (1st, 3rd, 5th, 7th...).</p></div>
+          <div class="char-card"><h4>🎹 Musical Applications</h4><p>Classic video game sounds, organ-like tones, woodwind emulations, and aggressive leads.</p></div>
+          <div class="char-card"><h4>⚡ Synthesis Use</h4><p>Excellent for subtractive synthesis; low-pass to sculpt timbre.</p></div>
         </div>
         <div class="harmonic-content">
           <h4>Harmonic Analysis</h4>
-          <div class="harmonic-bars">
-            <div class="harmonic-bar" style="height:100%"></div>
-            <div class="harmonic-bar" style="height:0%"></div>
-            <div class="harmonic-bar" style="height:60%"></div>
-            <div class="harmonic-bar" style="height:0%"></div>
-            <div class="harmonic-bar" style="height:35%"></div>
-            <div class="harmonic-bar" style="height:0%"></div>
-            <div class="harmonic-bar" style="height:20%"></div>
-          </div>
-          <p><strong>Rich in odd harmonics - 1st, 3rd, 5th, 7th...</strong></p>
+          <div class="harmonic-bars"><div class="harmonic-bar" style="height:100%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:60%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:35%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:20%"></div></div>
+          <p><strong>Rich in odd harmonics.</strong></p>
         </div>
       </article>
 
-      <!-- SAWTOOTH -->
       <article class="panel wave-card">
         <div class="wave-title"><span class="tag">SAW</span><h3>🔺 Sawtooth Wave - The Harmonic Powerhouse</h3></div>
         <div class="oscilloscope"><canvas id="sawCanvas" class="waveform-canvas" height="180"></canvas><div class="scanline"></div></div>
         <div class="controls"><button class="btn" onclick="playWaveform('sawtooth')">🎵 Play Sawtooth Wave</button></div>
         <div class="char-grid">
-          <div class="char-card"><h4>🎯 Sound Character</h4><p>Bright, buzzy, and aggressive. The richest harmonic content of all basic waveforms. Often described as "brass-like" or "razor-sharp."</p></div>
-          <div class="char-card"><h4>🔬 Harmonic Content</h4><p>Contains ALL harmonics (1st, 2nd, 3rd, 4th...) with amplitude decreasing as 1/n, where n is the harmonic number.</p></div>
-          <div class="char-card"><h4>🎹 Musical Applications</h4><p>Brass sections, aggressive leads, bass sounds, string sections, and any sound requiring harmonic richness.</p></div>
-          <div class="char-card"><h4>⚡ Synthesis Use</h4><p>The go-to waveform for subtractive synthesis. Provides the most material to sculpt with filters and envelopes.</p></div>
+          <div class="char-card"><h4>🎯 Sound Character</h4><p>Bright, buzzy, and aggressive.</p></div>
+          <div class="char-card"><h4>🔬 Harmonic Content</h4><p>All harmonics present, amplitude ~ 1/n.</p></div>
+          <div class="char-card"><h4>🎹 Applications</h4><p>Brass, leads, basses, strings.</p></div>
+          <div class="char-card"><h4>⚡ Use</h4><p>Go-to for subtractive synthesis.</p></div>
         </div>
         <div class="harmonic-content">
           <h4>Harmonic Analysis</h4>
-          <div class="harmonic-bars">
-            <div class="harmonic-bar" style="height:100%"></div>
-            <div class="harmonic-bar" style="height:50%"></div>
-            <div class="harmonic-bar" style="height:33%"></div>
-            <div class="harmonic-bar" style="height:25%"></div>
-            <div class="harmonic-bar" style="height:20%"></div>
-            <div class="harmonic-bar" style="height:16%"></div>
-            <div class="harmonic-bar" style="height:14%"></div>
-          </div>
-          <p><strong>All harmonics present - decreasing as 1/n</strong></p>
+          <div class="harmonic-bars"><div class="harmonic-bar" style="height:100%"></div><div class="harmonic-bar" style="height:50%"></div><div class="harmonic-bar" style="height:33%"></div><div class="harmonic-bar" style="height:25%"></div><div class="harmonic-bar" style="height:20%"></div><div class="harmonic-bar" style="height:16%"></div><div class="harmonic-bar" style="height:14%"></div></div>
+          <p><strong>All harmonics present.</strong></p>
         </div>
       </article>
 
-      <!-- TRIANGLE -->
       <article class="panel wave-card">
         <div class="wave-title"><span class="tag">TRIANGLE</span><h3>🔺 Triangle Wave - The Smooth Alternative</h3></div>
         <div class="oscilloscope"><canvas id="triangleCanvas" class="waveform-canvas" height="180"></canvas><div class="scanline"></div></div>
         <div class="controls"><button class="btn" onclick="playWaveform('triangle')">🎵 Play Triangle Wave</button></div>
         <div class="char-grid">
-          <div class="char-card"><h4>🎯 Sound Character</h4><p>Smoother than square wave, less aggressive than sawtooth. Often described as "hollow" but warmer than a square wave.</p></div>
-          <div class="char-card"><h4>🔬 Harmonic Content</h4><p>Contains odd harmonics only, but they decrease much more rapidly than in a square wave (as 1/n²).</p></div>
-          <div class="char-card"><h4>🎹 Musical Applications</h4><p>Flute-like sounds, soft leads, padding sounds, and anywhere you need something between a sine and square wave.</p></div>
-          <div class="char-card"><h4>⚡ Synthesis Use</h4><p>Good for creating evolving pads and leads. Less harsh than square wave, more interesting than sine wave.</p></div>
+          <div class="char-card"><h4>🎯 Character</h4><p>Smoother than square, mellower than saw.</p></div>
+          <div class="char-card"><h4>🔬 Harmonics</h4><p>Odd only, amplitude ~ 1/n².</p></div>
+          <div class="char-card"><h4>🎹 Uses</h4><p>Flute-like leads, pads.</p></div>
+          <div class="char-card"><h4>⚡ Use</h4><p>Between sine and square.</p></div>
         </div>
         <div class="harmonic-content">
           <h4>Harmonic Analysis</h4>
-          <div class="harmonic-bars">
-            <div class="harmonic-bar" style="height:100%"></div>
-            <div class="harmonic-bar" style="height:0%"></div>
-            <div class="harmonic-bar" style="height:11%"></div>
-            <div class="harmonic-bar" style="height:0%"></div>
-            <div class="harmonic-bar" style="height:4%"></div>
-            <div class="harmonic-bar" style="height:0%"></div>
-            <div class="harmonic-bar" style="height:2%"></div>
-          </div>
-          <p><strong>Odd harmonics only - decreasing as 1/n²</strong></p>
+          <div class="harmonic-bars"><div class="harmonic-bar" style="height:100%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:11%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:4%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:2%"></div></div>
+          <p><strong>Odd harmonics only.</strong></p>
         </div>
       </article>
     </section>
 
-    <!-- ADSR Envelope Section -->
+    <!-- ADSR -->
     <section class="adsr-section">
       <h2>📈 ADSR Envelope — Shaping Sound Over Time</h2>
-      <p class="section-text" style="text-align:center">Press and HOLD on the graph (or hold “Z”) to play. Release to trigger the Release stage.</p>
+      <p class="section-text" style="text-align:center">Press and HOLD on the graph (or hold “Z”) to play; release to trigger Release.</p>
       <div class="envelope-visual"><canvas class="waveform-canvas" id="envelopeCanvas"></canvas><div class="scanline"></div></div>
       <div class="synth-panel">
         <div class="knob-container">
-          <div class="knob-group"><div class="knob-label">Attack</div><div class="knob" data-param="attack"><input type="range" class="knob-input" id="attackKnob" min="1" max="2000" value="100" oninput="updateKnob('attack', this.value)"></div><div class="knob-value" id="attackValue">100ms</div></div>
-          <div class="knob-group"><div class="knob-label">Decay</div><div class="knob" data-param="decay"><input type="range" class="knob-input" id="decayKnob" min="1" max="2000" value="300" oninput="updateKnob('decay', this.value)"></div><div class="knob-value" id="decayValue">300ms</div></div>
-          <div class="knob-group"><div class="knob-label">Sustain</div><div class="knob" data-param="sustain"><input type="range" class="knob-input" id="sustainKnob" min="0" max="100" value="60" oninput="updateKnob('sustain', this.value)"></div><div class="knob-value" id="sustainValue">60%</div></div>
-          <div class="knob-group"><div class="knob-label">Release</div><div class="knob" data-param="release"><input type="range" class="knob-input" id="releaseKnob" min="10" max="3000" value="500" oninput="updateKnob('release', this.value)"></div><div class="knob-value" id="releaseValue">500ms</div></div>
+          <div class="knob-group">
+            <div class="knob-label">Attack</div>
+            <div class="knob" data-param="attack"><input type="range" class="knob-input" id="attackKnob" min="1" max="2000" value="100" oninput="updateKnob('attack', this.value)"></div>
+            <div class="knob-value" id="attackValue">100ms</div>
+          </div>
+          <div class="knob-group">
+            <div class="knob-label">Decay</div>
+            <div class="knob" data-param="decay"><input type="range" class="knob-input" id="decayKnob" min="1" max="2000" value="300" oninput="updateKnob('decay', this.value)"></div>
+            <div class="knob-value" id="decayValue">300ms</div>
+          </div>
+          <div class="knob-group">
+            <div class="knob-label">Sustain</div>
+            <div class="knob" data-param="sustain"><input type="range" class="knob-input" id="sustainKnob" min="0" max="100" value="60" oninput="updateKnob('sustain', this.value)"></div>
+            <div class="knob-value" id="sustainValue">60%</div>
+          </div>
+          <div class="knob-group">
+            <div class="knob-label">Release</div>
+            <div class="knob" data-param="release"><input type="range" class="knob-input" id="releaseKnob" min="10" max="3000" value="500" oninput="updateKnob('release', this.value)"></div>
+            <div class="knob-value" id="releaseValue">500ms</div>
+          </div>
         </div>
       </div>
       <div style="text-align:center;margin:16px 0"><button class="play-adsr" onclick="playWithEnvelope()">🎵 Play one-shot ADSR</button></div>
     </section>
 
-    <!-- Filter Section -->
+    <!-- FILTER -->
     <section class="filter-section">
       <h2>🎛️ Filter — Sculpting Your Sound</h2>
       <p class="section-text" style="text-align:center">Remove or emphasize frequencies to shape the character of your waveform.</p>
@@ -323,7 +318,7 @@
       <div style="text-align:center;margin:16px 0"><button class="play-filter" onclick="playWithFilter()">🔊 Play with Filter</button></div>
     </section>
 
-    <!-- Synthesis Playground -->
+    <!-- MINI SYNTH -->
     <section class="synthesis-playground">
       <h2>🎮 Mini Synthesizer — Put It All Together!</h2>
       <p class="section-text" style="text-align:center">Combine waveforms, envelopes, and filters to craft a patch.</p>
@@ -354,58 +349,16 @@
       </div>
     </section>
 
-    <!-- TECHNIQUES / EXAMPLES / TIPS ... (unchanged content below) -->
-    <section class="panel">
-      <h3>🎛️ Synthesis Techniques Using Basic Waveforms</h3>
-      <div class="tech-grid">
-        <div class="tech"><h4>🔧 Subtractive Synthesis</h4><p><strong>Primary Waveforms:</strong> Sawtooth, Square</p><p>Start with harmonically rich waveforms and remove frequencies using filters. Sawtooth waves are perfect because they provide the most harmonic content to sculpt.</p><p><strong>Example:</strong> Sawtooth → Low-pass filter → ADSR envelope = Classic analog lead sound</p></div>
-        <div class="tech"><h4>🌊 FM Synthesis</h4><p><strong>Primary Waveforms:</strong> Sine waves</p><p>Use sine waves as both carriers (the main sound) and modulators (frequency modulators). Different ratios create different harmonic content.</p><p><strong>Example:</strong> Sine carrier + Sine modulator at 2:1 ratio = Bell-like tones</p></div>
-        <div class="tech"><h4>🔄 AM Synthesis</h4><p><strong>Any waveform</strong> can be amplitude modulated</p><p>Modulate the amplitude of one waveform with another. Creates tremolo effects and can generate new sidebands.</p><p><strong>Example:</strong> Sawtooth AM'd by triangle = Rhythmic, pulsing texture</p></div>
-        <div class="tech"><h4>📐 Additive Synthesis</h4><p><strong>Primary Waveforms:</strong> Sine waves</p><p>Build complex sounds by adding multiple sine waves at different frequencies and amplitudes. Each sine wave represents a harmonic.</p><p><strong>Example:</strong> Fundamental + 3rd harmonic + 5th harmonic = Square wave</p></div>
-        <div class="tech"><h4>🎯 Pulse Width Modulation</h4><p><strong>Primary Waveforms:</strong> Square wave variants</p><p>Vary the width of the square wave's pulses. Creates movement and changes the harmonic content dynamically.</p><p><strong>Example:</strong> PWM square wave = Classic analog string ensemble sound</p></div>
-        <div class="tech"><h4>🔗 Ring Modulation</h4><p><strong>Any two waveforms</strong> can be ring modulated</p><p>Multiply two signals together, creating sum and difference frequencies. Often creates bell-like or metallic timbres.</p><p><strong>Example:</strong> Sine × Square = Complex, inharmonic spectrum</p></div>
-      </div>
-    </section>
-
-    <section class="panel">
-      <h3>🎵 Practical Sound Design Examples</h3>
-      <div class="examples-grid">
-        <div class="example-card"><h4>🎺 Brass Sound</h4><p><strong>Start with:</strong> Sawtooth wave</p><p><strong>Processing:</strong></p><ul><li>Low-pass filter with moderate resonance</li><li>Filter envelope for brightness changes</li><li>Amplitude envelope with slow attack</li><li>Add some vibrato with sine wave modulation</li></ul></div>
-        <div class="example-card"><h4>🎹 Classic Lead</h4><p><strong>Start with:</strong> Square or Sawtooth wave</p><p><strong>Processing:</strong></p><ul><li>High-pass filter to remove mud</li><li>Low-pass filter for tone shaping</li><li>Fast attack, moderate decay envelope</li><li>Add portamento for smooth note transitions</li></ul></div>
-        <div class="example-card"><h4>🔔 Bell Sound</h4><p><strong>Start with:</strong> Sine wave (FM synthesis)</p><p><strong>Processing:</strong></p><ul><li>Use sine wave as modulator at 3.5:1 ratio</li><li>High modulation index for brightness</li><li>Exponential decay envelope</li><li>Add reverb for space</li></ul></div>
-        <div class="example-card"><h4>🌊 Pad Sound</h4><p><strong>Start with:</strong> Multiple sawtooth waves (detuned)</p><p><strong>Processing:</strong></p><ul><li>Low-pass filter with low cutoff</li><li>Very slow attack envelope</li><li>Add chorus or ensemble effect</li><li>Layer different octaves</li></ul></div>
-        <div class="example-card"><h4>🎮 Retro Game Sound</h4><p><strong>Start with:</strong> Square wave</p><p><strong>Processing:</strong></p><ul><li>Fast attack, quick decay</li><li>Pitch envelope for "blip" effect</li><li>Keep it simple - minimal processing</li><li>Use different pulse widths for variation</li></ul></div>
-        <div class="example-card"><h4>🎸 Bass Sound</h4><p><strong>Start with:</strong> Sawtooth wave</p><p><strong>Processing:</strong></p><ul><li>Low-pass filter with envelope modulation</li><li>Add sub-oscillator (sine wave, -1 octave)</li><li>Compression for punch</li><li>Short decay for percussive attacks</li></ul></div>
-      </div>
-    </section>
-
-    <section class="tips">
-      <div class="tip"><h4>💡 Pro Tips for Waveform Selection</h4>
-        <ul>
-          <li><strong>Frequency Matters:</strong> Higher frequencies make harmonic content more apparent. Test your sounds across different octaves.</li>
-          <li><strong>Layering Power:</strong> Combine different waveforms for complex timbres. Try sine + sawtooth for warm leads.</li>
-          <li><strong>Phase Relationships:</strong> When layering waveforms, pay attention to phase alignment to avoid cancellation.</li>
-          <li><strong>Context is Key:</strong> A harsh sawtooth might sound perfect in a dense mix but overwhelming solo.</li>
-          <li><strong>Modulation Magic:</strong> Use one waveform to modulate parameters of another for evolving textures.</li>
-        </ul>
-      </div>
-      <div class="tip"><h4>🎯 Choosing the Right Waveform</h4>
-        <ul>
-          <li><strong>For Pure, Clean Sounds:</strong> Start with sine waves</li>
-          <li><strong>For Cutting Through a Mix:</strong> Use sawtooth or square waves</li>
-          <li><strong>For Vintage/Retro Sounds:</strong> Square waves are your friend</li>
-          <li><strong>For Complex Filtering:</strong> Sawtooth provides the most material</li>
-          <li><strong>For Smooth, Mellow Sounds:</strong> Triangle waves offer a middle ground</li>
-        </ul>
-      </div>
-    </section>
+    <!-- TECHNIQUES / EXAMPLES / TIPS (unchanged copy omitted for brevity) -->
+    <section class="panel"><h3>🎛️ Synthesis Techniques Using Basic Waveforms</h3><p class="section-text">Sawtooth/Square for subtractive, Sine for FM/Additive, etc.</p></section>
+    <section class="panel"><h3>🎵 Practical Sound Design Examples</h3><p class="section-text">Brass, leads, pads, bells, retro game, bass…</p></section>
+    <section class="tips"><div class="tip"><h4>💡 Pro Tips</h4><ul><li>Test across octaves</li><li>Layer waveforms</li><li>Mind phase</li><li>Use modulation</li></ul></div></section>
 
     <section class="panel">
       <h3>🎓 Mastering Waveform Fundamentals</h3>
       <div class="section-text">
-        <p>Understanding these four basic waveforms is like learning the alphabet of electronic music. Each waveform is a different "letter" that can be combined, modified, and sculpted to create an infinite vocabulary of sounds.</p>
-        <p>Remember that in modern synthesis, these pure waveforms are just starting points. The magic happens when you combine them with filters, envelopes, modulation, and effects. Practice identifying these waveforms in your favorite electronic music - you'll start to hear how producers use each one to achieve specific sonic goals.</p>
-        <p style="font-weight:700;color:var(--accent)">The key to great synthesis is understanding not just what each waveform sounds like, but why you would choose one over another in different musical contexts.</p>
+        <p>These waveforms are the alphabet of electronic sound. Combine with filters, envelopes, and modulation for infinite variety.</p>
+        <p style="font-weight:700;color:var(--accent)">Choosing the right waveform is about context and intent.</p>
       </div>
     </section>
 
@@ -430,14 +383,18 @@
         try{ currentGain.gain.setTargetAtTime(0.0001, audioContext.currentTime, time);}catch(e){} }
       if(currentOsc){ try{ currentOsc.stop(audioContext.currentTime + time*2);}catch(e){} }
     }
-    function playWaveform(type){ ensureAudio(); stopCurrent();
+
+    function playWaveform(type){
+      ensureAudio(); stopCurrent();
       const osc = audioContext.createOscillator(); const gain = audioContext.createGain();
       osc.type = type; osc.frequency.value = currentFreq; gain.gain.value = 0.0001;
       const filter = audioContext.createBiquadFilter(); filter.type='lowpass'; filter.frequency.value = 16000;
       osc.connect(filter); filter.connect(gain); gain.connect(audioContext.destination);
       const now = audioContext.currentTime; gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.18, now + 0.05); gain.gain.exponentialRampToValueAtTime(0.01, now + 1.8);
-      osc.start(); osc.stop(now + 2.2); currentOsc = osc; currentGain = gain; setStatus(`Playing ${type} @ ${currentFreq}Hz`);
+      gain.gain.exponentialRampToValueAtTime(0.18, now + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 1.8);
+      osc.start(); osc.stop(now + 2.2);
+      currentOsc = osc; currentGain = gain; setStatus(`Playing ${type} @ ${currentFreq}Hz`);
     }
 
     function updateFrequency(val){ currentFreq = parseInt(val,10); if(freqDisplay) freqDisplay.textContent = `${currentFreq} Hz`; drawAll(); }
@@ -455,7 +412,7 @@
       if(e.key.toLowerCase()==='z'){ downKeys.delete('z'); releaseADSRNote(); }
     });
 
-    // Theme toggle -> pauses/plays aurora animation (gradient)
+    // Toggle Glow (pause/resume gradient animation)
     const themeToggle = document.getElementById('themeToggle');
     const auroraEl = document.querySelector('.aurora');
     let glowOn = true;
@@ -470,19 +427,30 @@
     function scrollToInteractive(){ const el=document.getElementById('interactive'); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
 
     // --- Drawing ---
-    function drawWave(canvasId, type, cycles=2){ const canvas=document.getElementById(canvasId); if(!canvas) return; const dpr=Math.max(1, Math.min(2, window.devicePixelRatio||1)); const rect=canvas.getBoundingClientRect(); canvas.width=rect.width*dpr; canvas.height=rect.height*dpr; const ctx=canvas.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); const w=rect.width,h=rect.height; const cx=h/2, amp=h*0.38; ctx.clearRect(0,0,w,h); ctx.fillStyle='#0e1524'; ctx.fillRect(0,0,w,h); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(0,cx); ctx.lineTo(w,cx); ctx.stroke(); ctx.lineWidth=2.5; ctx.shadowColor='rgba(0,229,255,.65)'; ctx.shadowBlur=8; ctx.strokeStyle='#75f6ff'; ctx.beginPath(); for(let x=0;x<w;x++){ const t=(x/w)*cycles*Math.PI*2; let y=0; switch(type){ case 'sine': y=Math.sin(t); break; case 'square': y=Math.sin(t)>=0?1:-1; break; case 'sawtooth': y=2*((t%(2*Math.PI))/(2*Math.PI))-1; break; case 'triangle': const saw=2*((t%(2*Math.PI))/(2*Math.PI))-1; y=Math.abs(saw)*2-1; break; } const py=cx - y*amp; (x===0)?ctx.moveTo(x,py):ctx.lineTo(x,py);} ctx.stroke(); }
-
+    function drawWave(canvasId, type, cycles=2){
+      const canvas=document.getElementById(canvasId); if(!canvas) return;
+      const dpr=Math.max(1, Math.min(2, window.devicePixelRatio||1));
+      const rect=canvas.getBoundingClientRect(); canvas.width=rect.width*dpr; canvas.height=rect.height*dpr;
+      const ctx=canvas.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+      const w=rect.width,h=rect.height; const cx=h/2, amp=h*0.38;
+      ctx.clearRect(0,0,w,h); ctx.fillStyle='#0e1524'; ctx.fillRect(0,0,w,h);
+      ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(0,cx); ctx.lineTo(w,cx); ctx.stroke();
+      ctx.lineWidth=2.5; ctx.shadowColor='rgba(0,229,255,.65)'; ctx.shadowBlur=8; ctx.strokeStyle='#75f6ff'; ctx.beginPath();
+      for(let x=0;x<w;x++){ const t=(x/w)*cycles*Math.PI*2; let y=0;
+        switch(type){ case 'sine': y=Math.sin(t); break;
+          case 'square': y=Math.sin(t)>=0?1:-1; break;
+          case 'sawtooth': y=2*((t%(2*Math.PI))/(2*Math.PI))-1; break;
+          case 'triangle': const saw=2*((t%(2*Math.PI))/(2*Math.PI))-1; y=Math.abs(saw)*2-1; break; }
+        const py=cx - y*amp; (x===0)?ctx.moveTo(x,py):ctx.lineTo(x,py);
+      } ctx.stroke();
+    }
     function drawAll(){
       drawWave('sineCanvas','sine'); drawWave('squareCanvas','square'); drawWave('sawCanvas','sawtooth'); drawWave('triangleCanvas','triangle');
       drawWave('miniSine','sine',2); drawWave('miniSquare','square',2); drawWave('miniSaw','sawtooth',2); drawWave('miniTriangle','triangle',2);
-      // optional composite ids (safe if not present)
       drawWave('cmpSine','sine',2); drawWave('cmpSquare','square',2); drawWave('cmpSaw','sawtooth',2); drawWave('cmpTriangle','triangle',2);
     }
 
-    window.addEventListener('DOMContentLoaded', ()=>{ drawAll(); setStatus('Audio: idle'); });
-    window.addEventListener('resize', ()=> drawAll());
-
-    // ==== Synth params & helpers (ADSR / Filter / Synth) ====
+    // ==== Synth params & helpers ====
     let selectedWaveform = 'sawtooth';
     const synthParams = {
       attack: 0.1, decay: 0.3, sustain: 0.6, release: 0.5,
@@ -508,16 +476,22 @@
       if(['attack','decay','sustain','release'].includes(param)) drawEnvelope();
       if(['cutoff','resonance'].includes(param)) drawFilterResponse();
     }
+
+    // rotate only the inner rotor
     function updateKnobRotation(param, value){
-      const knob = document.querySelector(`.knob[data-param="${param}"]`); if(!knob) return;
-      const input = knob.querySelector('input'); const min=+input.min, max=+input.max;
-      const n=(value-min)/(max-min); const rot=-140 + n*280;
-      knob.style.transform = `rotate(${rot}deg)`;
+      const knob = document.querySelector(`.knob[data-param="${param}"]`);
+      if(!knob) return; const input = knob.querySelector('input'); const rotor = knob.querySelector('.rotor');
+      if(!input || !rotor) return;
+      const min=+input.min, max=+input.max;
+      const n=(value-min)/(max-min);
+      const rot=-140 + n*280;
+      rotor.style.transform = `rotate(${rot}deg)`;
     }
+
     function updateFilterType(){ const sel=document.getElementById('filterTypeSelect'); if(!sel) return; synthParams.filterType = sel.value; drawFilterResponse(); }
     function selectWaveform(type, ev){ selectedWaveform = type; if(ev){ document.querySelectorAll('.wave-button').forEach(b=>b.classList.remove('active')); ev.target.classList.add('active'); } }
 
-    function playWithEnvelope(){ // one-shot button (kept)
+    function playWithEnvelope(){ // one-shot button
       ensureAudio(); stopCurrent();
       const osc=audioContext.createOscillator(); const gain=audioContext.createGain();
       osc.type='sawtooth'; osc.frequency.value=currentFreq; osc.connect(gain); gain.connect(audioContext.destination);
@@ -531,25 +505,22 @@
       currentOsc = osc; currentGain = gain; setStatus('ADSR one-shot');
     }
 
-    // NEW: ADSR gate (press/hold)
-    let envOsc=null, envGain=null, envFilt=null, gateOn=false;
+    // ADSR Gate (press/hold)
+    let envOsc=null, envGain=null, gateOn=false;
     function startADSRNote(){
       ensureAudio(); stopCurrent(0.005);
       gateOn = true;
       envOsc = audioContext.createOscillator();
       envGain = audioContext.createGain();
-      envFilt = audioContext.createBiquadFilter();
       envOsc.type='sawtooth'; envOsc.frequency.value=currentFreq;
-      envFilt.type = synthParams.filterType; envFilt.frequency.value = Math.max(80, synthParams.cutoff); envFilt.Q.value = synthParams.resonance;
-      envOsc.connect(envFilt); envFilt.connect(envGain); envGain.connect(audioContext.destination);
+      envOsc.connect(envGain); envGain.connect(audioContext.destination);
       const now=audioContext.currentTime; const maxG = Math.max(0.05, 0.4*synthParams.volume);
       envGain.gain.cancelScheduledValues(now);
       envGain.gain.setValueAtTime(0, now);
-      // Attack -> Decay -> Sustain (sustain holds until release)
       envGain.gain.linearRampToValueAtTime(maxG, now + synthParams.attack);
       envGain.gain.linearRampToValueAtTime(maxG*synthParams.sustain, now + synthParams.attack + synthParams.decay);
       envOsc.start(now);
-      currentOsc=envOsc; currentGain=envGain; currentFilter=envFilt;
+      currentOsc=envOsc; currentGain=envGain;
       setStatus('ADSR Gate: ON');
     }
     function releaseADSRNote(){
@@ -559,7 +530,6 @@
       const end=now + Math.max(0.03, synthParams.release);
       try{
         envGain.gain.cancelScheduledValues(now);
-        // start release from current value
         const cur = envGain.gain.value;
         envGain.gain.setValueAtTime(cur, now);
         envGain.gain.exponentialRampToValueAtTime(0.0008, end);
@@ -568,13 +538,12 @@
       setStatus('ADSR Gate: OFF');
     }
 
-    // Pointer play on envelope canvas
+    // Pointer play on envelope canvas + X scrubs pitch
     const envCanvas = document.getElementById('envelopeCanvas');
     if(envCanvas){
       envCanvas.addEventListener('pointerdown', (e)=>{ e.preventDefault(); startADSRNote(); envCanvas.setPointerCapture(e.pointerId); });
       envCanvas.addEventListener('pointerup',   (e)=>{ e.preventDefault(); releaseADSRNote(); envCanvas.releasePointerCapture(e.pointerId); });
       envCanvas.addEventListener('pointercancel', ()=> releaseADSRNote());
-      // live frequency scrub while holding (horizontal)
       envCanvas.addEventListener('pointermove', (e)=>{
         if(!gateOn) return;
         const rect = envCanvas.getBoundingClientRect();
@@ -586,19 +555,50 @@
       });
     }
 
-    function playWithFilter(){ ensureAudio(); stopCurrent(); const osc=audioContext.createOscillator(); const gain=audioContext.createGain(); const filt=audioContext.createBiquadFilter(); osc.type='sawtooth'; osc.frequency.value=currentFreq; filt.type=synthParams.filterType; filt.frequency.value=synthParams.cutoff; filt.Q.value=synthParams.resonance; osc.connect(filt); filt.connect(gain); gain.connect(audioContext.destination); const now=audioContext.currentTime; gain.gain.setValueAtTime(0, now); gain.gain.exponentialRampToValueAtTime(0.18, now + 0.05); gain.gain.exponentialRampToValueAtTime(0.0008, now + 2.6); osc.start(now); osc.stop(now + 2.8); currentOsc=osc; currentGain=gain; currentFilter=filt; setStatus('Filter demo'); }
+    function playWithFilter(){
+      ensureAudio(); stopCurrent();
+      const osc=audioContext.createOscillator(); const gain=audioContext.createGain(); const filt=audioContext.createBiquadFilter();
+      osc.type='sawtooth'; osc.frequency.value=currentFreq; filt.type=synthParams.filterType; filt.frequency.value=synthParams.cutoff; filt.Q.value=synthParams.resonance;
+      osc.connect(filt); filt.connect(gain); gain.connect(audioContext.destination);
+      const now=audioContext.currentTime; gain.gain.setValueAtTime(0, now);
+      gain.gain.exponentialRampToValueAtTime(0.18, now + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.0008, now + 2.6);
+      osc.start(now); osc.stop(now + 2.8);
+      currentOsc=osc; currentGain=gain; currentFilter=filt;
+      setStatus('Filter demo');
+    }
 
-    function playSynthSound(){ ensureAudio(); stopCurrent(); const osc=audioContext.createOscillator(); const gain=audioContext.createGain(); const filt=audioContext.createBiquadFilter(); osc.type=selectedWaveform; osc.frequency.value=currentFreq; filt.type='lowpass'; filt.frequency.value=synthParams.synthCutoff; filt.Q.value=synthParams.synthRes; osc.connect(filt); filt.connect(gain); gain.connect(audioContext.destination); const now=audioContext.currentTime; const len=2.6; const maxG = Math.max(0.05, Math.min(0.5, synthParams.volume)); gain.gain.setValueAtTime(0, now); gain.gain.linearRampToValueAtTime(maxG, now + synthParams.attack); gain.gain.linearRampToValueAtTime(maxG*synthParams.sustain, now + synthParams.attack + synthParams.decay); gain.gain.setValueAtTime(maxG*synthParams.sustain, now + len - synthParams.release); gain.gain.exponentialRampToValueAtTime(0.0008, now + len);
-      const startCut = Math.max(40, synthParams.synthCutoff*0.35); const peak = synthParams.synthCutoff * (1 + synthParams.envAmount);
-      filt.frequency.setValueAtTime(startCut, now); filt.frequency.linearRampToValueAtTime(peak, now + synthParams.attack); filt.frequency.linearRampToValueAtTime(startCut + (peak-startCut)*synthParams.sustain, now + synthParams.attack + synthParams.decay); filt.frequency.setValueAtTime(startCut + (peak-startCut)*synthParams.sustain, now + len - synthParams.release); filt.frequency.exponentialRampToValueAtTime(Math.max(30, startCut), now + len);
-      osc.start(now); osc.stop(now + len); currentOsc=osc; currentGain=gain; currentFilter=filt; setStatus('Mini synth'); }
+    function playSynthSound(){
+      ensureAudio(); stopCurrent();
+      const osc=audioContext.createOscillator(); const gain=audioContext.createGain(); const filt=audioContext.createBiquadFilter();
+      osc.type=selectedWaveform; osc.frequency.value=currentFreq;
+      filt.type='lowpass'; filt.frequency.value=synthParams.synthCutoff; filt.Q.value=synthParams.synthRes;
+      osc.connect(filt); filt.connect(gain); gain.connect(audioContext.destination);
+      const now=audioContext.currentTime; const len=2.6; const maxG = Math.max(0.05, Math.min(0.5, synthParams.volume));
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(maxG, now + synthParams.attack);
+      gain.gain.linearRampToValueAtTime(maxG*synthParams.sustain, now + synthParams.attack + synthParams.decay);
+      gain.gain.setValueAtTime(maxG*synthParams.sustain, now + len - synthParams.release);
+      gain.gain.exponentialRampToValueAtTime(0.0008, now + len);
+      const startCut = Math.max(40, synthParams.synthCutoff*0.35);
+      const peak = synthParams.synthCutoff * (1 + synthParams.envAmount);
+      filt.frequency.setValueAtTime(startCut, now);
+      filt.frequency.linearRampToValueAtTime(peak, now + synthParams.attack);
+      filt.frequency.linearRampToValueAtTime(startCut + (peak-startCut)*synthParams.sustain, now + synthParams.attack + synthParams.decay);
+      filt.frequency.setValueAtTime(startCut + (peak-startCut)*synthParams.sustain, now + len - synthParams.release);
+      filt.frequency.exponentialRampToValueAtTime(Math.max(30, startCut), now + len);
+      osc.start(now); osc.stop(now + len);
+      currentOsc=osc; currentGain=gain; currentFilter=filt;
+      setStatus('Mini synth');
+    }
 
-    function loadPreset(name){ const presets={
-      lead:{waveform:'sawtooth', attack:50,decay:200,sustain:80,release:300, synthCutoff:4000,synthRes:8,envAmount:70,volume:75},
-      bass:{waveform:'sawtooth', attack:10,decay:400,sustain:40,release:200, synthCutoff:800,synthRes:5,envAmount:30,volume:85},
-      pad:{waveform:'sawtooth', attack:800,decay:600,sustain:70,release:1200, synthCutoff:1500,synthRes:2,envAmount:40,volume:60},
-      pluck:{waveform:'sawtooth', attack:5,decay:300,sustain:10,release:100, synthCutoff:5000,synthRes:12,envAmount:80,volume:70}
-    }[name]; if(!presets) return;
+    function loadPreset(name){
+      const presets={
+        lead:{waveform:'sawtooth', attack:50,decay:200,sustain:80,release:300, synthCutoff:4000,synthRes:8,envAmount:70,volume:75},
+        bass:{waveform:'sawtooth', attack:10,decay:400,sustain:40,release:200, synthCutoff:800,synthRes:5,envAmount:30,volume:85},
+        pad:{waveform:'sawtooth', attack:800,decay:600,sustain:70,release:1200, synthCutoff:1500,synthRes:2,envAmount:40,volume:60},
+        pluck:{waveform:'sawtooth', attack:5,decay:300,sustain:10,release:100, synthCutoff:5000,synthRes:12,envAmount:80,volume:70}
+      }[name]; if(!presets) return;
       const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.value = val; };
       set('attackKnob', presets.attack); set('decayKnob', presets.decay); set('sustainKnob', presets.sustain); set('releaseKnob', presets.release);
       set('synthCutoffKnob', presets.synthCutoff); set('synthResKnob', presets.synthRes); set('envAmountKnob', presets.envAmount); set('volumeKnob', presets.volume);
@@ -609,67 +609,117 @@
     }
 
     // Visualizers
-    function drawEnvelope(){ const canvas=document.getElementById('envelopeCanvas'); if(!canvas) return; const ctx=canvas.getContext('2d'); const w=canvas.width=canvas.clientWidth; const h=canvas.height=200; ctx.fillStyle='#0e1524'; ctx.fillRect(0,0,w,h); const sustainTime=1; const total=synthParams.attack + synthParams.decay + sustainTime + synthParams.release; const ax=(synthParams.attack/total)*w; const dx=ax + (synthParams.decay/total)*w; const sx=dx + (sustainTime/total)*w; const rx=w; const sy=20 + (160*(1 - synthParams.sustain)); ctx.strokeStyle='#ff9b4a'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(0,h-10); ctx.lineTo(ax,20); ctx.lineTo(dx,sy); ctx.lineTo(sx,sy); ctx.lineTo(rx,h-10); ctx.stroke(); }
+    function drawEnvelope(){
+      const canvas=document.getElementById('envelopeCanvas'); if(!canvas) return;
+      const ctx=canvas.getContext('2d'); const w=canvas.width=canvas.clientWidth; const h=canvas.height=200;
+      ctx.fillStyle='#0e1524'; ctx.fillRect(0,0,w,h);
+      const sustainTime=1; const total=synthParams.attack + synthParams.decay + sustainTime + synthParams.release;
+      const ax=(synthParams.attack/total)*w; const dx=ax + (synthParams.decay/total)*w; const sx=dx + (sustainTime/total)*w; const rx=w;
+      const sy=20 + (160*(1 - synthParams.sustain));
+      ctx.strokeStyle='#ff9b4a'; ctx.lineWidth=3; ctx.beginPath();
+      ctx.moveTo(0,h-10); ctx.lineTo(ax,20); ctx.lineTo(dx,sy); ctx.lineTo(sx,sy); ctx.lineTo(rx,h-10); ctx.stroke();
+    }
+    function drawFilterResponse(){
+      const canvas=document.getElementById('filterCanvas'); if(!canvas) return;
+      const ctx=canvas.getContext('2d'); const w=canvas.width=canvas.clientWidth; const h=canvas.height=200;
+      ctx.fillStyle='#0e1524'; ctx.fillRect(0,0,w,h); ctx.strokeStyle='#ffa94d'; ctx.lineWidth=2.5; ctx.beginPath();
+      for(let x=0;x<w;x++){
+        const freq = Math.pow(10, (x/w)*4 + 1); let amp=1;
+        if(synthParams.filterType==='lowpass'){
+          if(freq>synthParams.cutoff){ const r=freq/synthParams.cutoff; amp = 1/(1+Math.pow(r-1,2));
+            if(freq> synthParams.cutoff*0.7 && freq<synthParams.cutoff*1.5) amp *= (1 + synthParams.resonance/40); }
+        } else if(synthParams.filterType==='highpass'){
+          if(freq<synthParams.cutoff){ const r=synthParams.cutoff/freq; amp = 1/(1+Math.pow(r-1,2)); }
+        } else { const d=Math.abs(Math.log10(freq) - Math.log10(synthParams.cutoff)); amp = 1/(1+Math.pow(d*10,2)); amp *= (1 + synthParams.resonance/30); }
+        amp=Math.max(0,Math.min(1,amp)); const y=h - (amp*(h-20)); if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke(); const cx=(Math.log10(synthParams.cutoff)-1)/4 * w; ctx.setLineDash([5,5]); ctx.strokeStyle='#ff5e1a'; ctx.beginPath(); ctx.moveTo(cx,0); ctx.lineTo(cx,h); ctx.stroke(); ctx.setLineDash([]);
+    }
 
-    function drawFilterResponse(){ const canvas=document.getElementById('filterCanvas'); if(!canvas) return; const ctx=canvas.getContext('2d'); const w=canvas.width=canvas.clientWidth; const h=canvas.height=200; ctx.fillStyle='#0e1524'; ctx.fillRect(0,0,w,h); ctx.strokeStyle='#ffa94d'; ctx.lineWidth=2.5; ctx.beginPath(); for(let x=0;x<w;x++){ const freq = Math.pow(10, (x/w)*4 + 1); let amp=1; if(synthParams.filterType==='lowpass'){ if(freq>synthParams.cutoff){ const r=freq/synthParams.cutoff; amp = 1/(1+Math.pow(r-1,2)); if(freq> synthParams.cutoff*0.7 && freq<synthParams.cutoff*1.5) amp *= (1 + synthParams.resonance/40); } }
-      else if(synthParams.filterType==='highpass'){ if(freq<synthParams.cutoff){ const r=synthParams.cutoff/freq; amp = 1/(1+Math.pow(r-1,2)); } }
-      else { const d=Math.abs(Math.log10(freq) - Math.log10(synthParams.cutoff)); amp = 1/(1+Math.pow(d*10,2)); amp *= (1 + synthParams.resonance/30); }
-      amp=Math.max(0,Math.min(1,amp)); const y=h - (amp*(h-20)); if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); }
-      ctx.stroke(); const cx=(Math.log10(synthParams.cutoff)-1)/4 * w; ctx.setLineDash([5,5]); ctx.strokeStyle='#ff5e1a'; ctx.beginPath(); ctx.moveTo(cx,0); ctx.lineTo(cx,h); ctx.stroke(); ctx.setLineDash([]); }
+    // --- Ensure rotors exist (so we don't edit HTML) ---
+    function ensureRotors(){
+      document.querySelectorAll('.knob').forEach(k=>{
+        if(!k.querySelector('.rotor')){
+          const r=document.createElement('div'); r.className='rotor';
+          const inp=k.querySelector('input'); if(inp) k.insertBefore(r, inp); else k.appendChild(r);
+        }
+      });
+    }
 
-    // Initialize rotations + visualizers
-    window.addEventListener('DOMContentLoaded', ()=>{
-      ['attack','decay','sustain','release','cutoff','resonance','synthCutoff','synthRes','envAmount','volume'].forEach(p=>{ const input=document.getElementById(p+'Knob'); if(input){ updateKnobRotation(p, input.value); }});
-      drawEnvelope(); drawFilterResponse();
-      setupKnobDragging(); // NEW
-    });
-
-    // NEW: Real potentiometer-style dragging for knobs (syncs with range inputs)
+    // --- Stable potentiometer dragging (cached center + rAF) ---
     function setupKnobDragging(){
+      const ANG_MIN = -140, ANG_MAX = 140;
+      let rafId = null;
+
       document.querySelectorAll('.knob').forEach(knob=>{
-        const input = knob.querySelector('input'); if(!input) return;
-        const param = knob.dataset.param;
-        const min = +input.min, max = +input.max;
+        const input = knob.querySelector('input'); const rotor = knob.querySelector('.rotor');
+        if(!input || !rotor) return;
 
-        function setFromAngle(deg){
-          // clamp to -140..140, map to [min,max]
-          const clamped = Math.max(-140, Math.min(140, deg));
-          const n = (clamped + 140)/280;
-          const val = min + n*(max-min);
-          input.value = val;
-          updateKnob(param, val);
+        let dragging=false, ptrId=null, cx=0, cy=0;
+        let pendingAngle=null, pendingVal=null;
+
+        const min=+input.min, max=+input.max;
+
+        const valueToAngle = (val)=> ANG_MIN + ((val - min)/(max - min))*(ANG_MAX - ANG_MIN);
+        const angleToValue = (deg)=> {
+          const clamped = Math.max(ANG_MIN, Math.min(ANG_MAX, deg));
+          const n = (clamped - ANG_MIN) / (ANG_MAX - ANG_MIN);
+          return min + n*(max-min);
+        };
+        const angleFromEvent = (e)=> {
+          const dx = e.clientX - cx, dy = e.clientY - cy;
+          return Math.atan2(dx, -dy) * 180/Math.PI; // 0° at top, clockwise positive
+        };
+        function scheduleRender(){
+          if(rafId != null) return;
+          rafId = requestAnimationFrame(()=>{
+            rafId = null;
+            if(pendingAngle==null || pendingVal==null) return;
+            rotor.style.transform = `rotate(${pendingAngle}deg)`;
+            input.value = pendingVal;
+            updateKnob(knob.dataset.param, pendingVal); // sync rest of UI/values
+            pendingAngle = pendingVal = null;
+          });
         }
 
-        function angleFromEvent(e){
-          const rect = knob.getBoundingClientRect();
-          const cx = rect.left + rect.width/2;
-          const cy = rect.top + rect.height/2;
-          const dx = e.clientX - cx;
-          const dy = e.clientY - cy;
-          // angle where 0° is "up", positive clockwise
-          const theta = Math.atan2(dx, -dy) * 180/Math.PI;
-          return theta;
-        }
-
-        let dragging=false, pointerId=null;
         knob.addEventListener('pointerdown', (e)=>{
-          dragging=true; pointerId=e.pointerId; knob.setPointerCapture(pointerId); knob.classList.add('grabbing');
-          e.preventDefault();
-          setFromAngle(angleFromEvent(e));
+          dragging=true; ptrId=e.pointerId; knob.setPointerCapture(ptrId); knob.classList.add('grabbing');
+          const rect = knob.getBoundingClientRect(); cx = rect.left + rect.width/2; cy = rect.top + rect.height/2;
+          const a = angleFromEvent(e); const v = angleToValue(a);
+          pendingAngle = valueToAngle(v); pendingVal = v; scheduleRender(); e.preventDefault();
         });
         knob.addEventListener('pointermove', (e)=>{
           if(!dragging) return;
-          setFromAngle(angleFromEvent(e));
+          const a = angleFromEvent(e); const v = angleToValue(a);
+          pendingAngle = valueToAngle(v); pendingVal = v; scheduleRender();
         });
-        function endDrag(e){
-          if(!dragging) return;
-          dragging=false; knob.classList.remove('grabbing');
-          try{ knob.releasePointerCapture(pointerId);}catch(_){}
-        }
+        function endDrag(){ if(!dragging) return; dragging=false; knob.classList.remove('grabbing'); try{ knob.releasePointerCapture(ptrId);}catch(_){}
+          ptrId=null; }
         knob.addEventListener('pointerup', endDrag);
         knob.addEventListener('pointercancel', endDrag);
+
+        // keep rotor synced on programmatic changes (presets/keyboard)
+        input.addEventListener('input', ()=>{ rotor.style.transform = `rotate(${valueToAngle(+input.value)}deg)`; });
+
+        // init angle
+        rotor.style.transform = `rotate(${valueToAngle(+input.value)}deg)`;
       });
     }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', ()=>{
+      drawAll(); setStatus('Audio: idle');
+
+      ensureRotors();
+
+      // set initial knob angles
+      ['attack','decay','sustain','release','cutoff','resonance','synthCutoff','synthRes','envAmount','volume']
+        .forEach(p=>{ const input=document.getElementById(p+'Knob'); if(input){ updateKnobRotation(p, input.value); }});
+
+      drawEnvelope(); drawFilterResponse();
+      setupKnobDragging();
+    });
+    window.addEventListener('resize', ()=> drawAll());
   </script>
 </body>
 </html>

@@ -10,32 +10,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0b0c;
-      --bg-2: #0f1113;
-      --text: #fff7ec;
-      --muted: #ffcf99;
-      --neon-1: #ff7a00;
-      --neon-2: #ffb000;
-      --neon-3: #ff5e1a;
-      --accent: #ffd166;
-      --card: rgba(255, 170, 60, 0.06);
-      --card-strong: rgba(255, 170, 60, 0.12);
-      --border: rgba(255, 170, 60, 0.20);
-      --shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(255, 170, 60, 0.06) inset;
+      --bg: #0a0b0c; --bg-2: #0f1113; --text: #fff7ec; --muted: #ffcf99;
+      --neon-1: #ff7a00; --neon-2: #ffb000; --neon-3: #ff5e1a; --accent: #ffd166;
+      --card: rgba(255,170,60,.06); --card-strong: rgba(255,170,60,.12);
+      --border: rgba(255,170,60,.20); --shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(255,170,60,.06) inset;
       --radius: 18px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{
-      margin:0;
-      font-family:"Space Grotesk",system-ui,-apple-system,Segoi UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
-      color:var(--text);
-      background:
-        radial-gradient(1200px 600px at 10% -10%, rgba(255,122,0,.18), transparent 60%),
-        radial-gradient(900px 500px at 110% 10%, rgba(255,176,0,.12), transparent 50%),
-        linear-gradient(180deg, #0a0b0c 0%, #0f1113 100%);
-      overflow-x:hidden
-    }
+    body{margin:0;font-family:"Space Grotesk",system-ui,-apple-system,Segoi UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;color:var(--text);
+      background:radial-gradient(1200px 600px at 10% -10%, rgba(255,122,0,.18), transparent 60%),
+                 radial-gradient(900px 500px at 110% 10%, rgba(255,176,0,.12), transparent 50%),
+                 linear-gradient(180deg, #0a0b0c 0%, #0f1113 100%); overflow-x:hidden}
     .holo-grid{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;background-image:linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);background-size:24px 24px;mask: radial-gradient(80% 60% at 50% 40%, black 40%, transparent 100%)}
     .aurora{position:fixed;inset:-20% -20% auto -20%;height:70vh;z-index:0;filter:blur(44px);opacity:.42;background:conic-gradient(from 0deg, var(--neon-1), var(--neon-2), var(--neon-3), var(--neon-1));animation:spin 28s linear infinite;transform-origin:60% 40%;transition:opacity .3s ease}
     .aurora.paused{animation-play-state:paused;opacity:0;}
@@ -56,45 +42,24 @@
     .hero p{margin:6px 0 0;color:var(--muted);font-size:clamp(14px,1.6vw,18px)}
     .grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
     .wave-card{position:relative;overflow:clip}
-    .wave-card::after{content:"";position:absolute;inset:-1px;border-radius:calc(var(--radius) + 2px);background:linear-gradient(120deg, color-mix(in srgb, var(--neon-1) 65%, transparent), transparent 35%),linear-gradient(300deg, color-mix(in srgb, var(--neon-2) 55%, transparent), transparent 35%);filter:blur(18px);opacity:.25;z-index:-1}
     .wave-title{display:flex;align-items:center;gap:10px;margin:0 0 10px}
-    .wave-title h3{margin:0;font-size:20px;letter-spacing:.02em}
-    .tag{font:700 11px/1 "JetBrains Mono", ui-monospace; color:var(--bg);background:linear-gradient(90deg, var(--neon-1), var(--neon-2));padding:6px 8px;border-radius:999px}
+    .tag{font:700 11px/1 "JetBrains Mono"; color:var(--bg);background:linear-gradient(90deg, var(--neon-1), var(--neon-2));padding:6px 8px;border-radius:999px}
     .oscilloscope{position:relative;height:180px;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:#0e1524;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)}
     canvas.waveform-canvas{width:100%;height:100%;display:block}
     .scanline{position:absolute;inset:0;background:repeating-linear-gradient(180deg, rgba(255,255,255,.06) 0 1px, transparent 1px 3px);mix-blend-mode:overlay;pointer-events:none}
-    .controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px}
-    .char-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-    .char-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
-    .char-card h4{margin:0 0 6px;font-size:14px;color:var(--accent);letter-spacing:.04em}
-    .char-card p{margin:0;color:var(--text);opacity:.9;font-size:14px}
-    .section-text{margin-top:12px;color:var(--text);opacity:.92}
-    .harmonic-content{margin-top:12px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px}
-    .harmonic-bars{display:flex;align-items:end;height:100px;gap:6px;margin-top:10px}
-    .harmonic-bar{width:16px;background:linear-gradient(to top, var(--neon-2), var(--neon-1));border-radius:3px 3px 0 0;transition:.2s}
-
     .interactive{display:grid;gap:14px}
     .slider-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
     .label{color:var(--muted);font-size:13px}
     input[type=range]{-webkit-appearance:none;appearance:none;height:8px;width:min(380px,70vw);background:linear-gradient(90deg, var(--neon-1), var(--neon-2));border-radius:999px;outline:none;border:1px solid var(--border)}
     input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:var(--text);border:2px solid var(--bg);box-shadow:0 0 0 6px color-mix(in srgb, var(--neon-1) 40%, transparent);cursor:pointer}
-    .value{font:700 12px/1 "JetBrains Mono", ui-monospace;color:var(--neon-1);padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:var(--card-strong)}
+    .value{font:700 12px/1 "JetBrains Mono";color:var(--neon-1);padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:var(--card-strong)}
     .mini-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
     .mini{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px;cursor:pointer;transition:transform .15s ease,border-color .15s ease;box-shadow:var(--shadow)}
     .mini:hover{transform:translateY(-2px);border-color:var(--neon-1)}
     .mini-label{text-align:center;color:var(--muted);font-size:12px;margin-top:6px}
     .tech-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
     .tech{background:linear-gradient(180deg, rgba(138,43,226,.16), rgba(0,229,255,.12));border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
-    .tech h4{margin:0 0 6px;color:var(--accent);letter-spacing:.04em}
-    .tech p{margin:6px 0;color:var(--text);opacity:.92}
-    .mono{font-family:"JetBrains Mono",ui-monospace;font-size:12px;color:var(--muted)}
-    .examples-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-    .example-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
-    .example-card h4{margin:0 0 6px;color:var(--accent)}
-    .example-card ul{margin:8px 0 0 18px}
-    .tips{display:grid;gap:14px}
-    .tip{background:linear-gradient(180deg, rgba(0,255,209,.12), rgba(0,255,209,.05));border:1px dashed color-mix(in srgb, var(--accent) 60%, white);border-radius:14px;padding:14px 16px}
-    .tip h4{margin:0 0 6px;color:var(--accent)}
+    .mono{font-family:"JetBrains Mono";font-size:12px;color:var(--muted)}
     footer{margin-top:34px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
     @media (min-width:900px){.hero{grid-template-columns:1.2fr .8fr;align-items:end}}
 
@@ -107,7 +72,7 @@
     .knob-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:18px;justify-items:center}
     .knob-group{text-align:center;color:var(--text)}
 
-    /* Pot outer shell (no transforms) */
+    /* Knob/pot: outer shell does not transform */
     .knob{
       width:88px;height:88px;position:relative;border-radius:50%;
       background:radial-gradient(circle, rgba(255,255,255,.12) 0%, rgba(0,0,0,.0) 65%), #0e1524;
@@ -118,9 +83,9 @@
     .knob.grabbing{cursor:grabbing}
     .knob-input{position:absolute;inset:0;opacity:0;cursor:pointer}
     .knob-label{font-size:12px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
-    .knob-value{font:700 12px/1 "JetBrains Mono",ui-monospace;color:var(--neon-1);background:var(--card-strong);border:1px solid var(--border);padding:6px 10px;border-radius:999px;display:inline-block;margin-top:6px;min-width:64px}
+    .knob-value{font:700 12px/1 "JetBrains Mono";color:var(--neon-1);background:var(--card-strong);border:1px solid var(--border);padding:6px 10px;border-radius:999px;display:inline-block;margin-top:6px;min-width:64px}
 
-    /* Inner rotor rotates to indicate value */
+    /* Inner rotor shows angle only */
     .knob .rotor{position:absolute;inset:0;border-radius:50%;pointer-events:none;transform:rotate(0deg)}
     .knob .rotor::before{
       content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);
@@ -158,7 +123,6 @@
     <section class="panel hero">
       <div>
         <h2>🎵 The Four Basic Waveforms &amp; Synthesis</h2>
-        <p>Master the fundamental building blocks of electronic music and sound design.</p>
       </div>
       <div class="panel" style="margin:0;">
         <div class="interactive" id="interactive">
@@ -168,33 +132,12 @@
             <span class="value" id="freqDisplay">220 Hz</span>
           </div>
           <div class="mini-grid">
-            <div class="mini" onclick="playWaveform('sine')" title="Play sine">
-              <div class="oscilloscope"><canvas id="miniSine" class="waveform-canvas" width="300" height="120"></canvas><div class="scanline"></div></div>
-              <div class="mini-label">Sine</div>
-            </div>
-            <div class="mini" onclick="playWaveform('square')" title="Play square">
-              <div class="oscilloscope"><canvas id="miniSquare" class="waveform-canvas" width="300" height="120"></canvas><div class="scanline"></div></div>
-              <div class="mini-label">Square</div>
-            </div>
-            <div class="mini" onclick="playWaveform('sawtooth')" title="Play sawtooth">
-              <div class="oscilloscope"><canvas id="miniSaw" class="waveform-canvas" width="300" height="120"></canvas><div class="scanline"></div></div>
-              <div class="mini-label">Sawtooth</div>
-            </div>
-            <div class="mini" onclick="playWaveform('triangle')" title="Play triangle">
-              <div class="oscilloscope"><canvas id="miniTriangle" class="waveform-canvas" width="300" height="120"></canvas><div class="scanline"></div></div>
-              <div class="mini-label">Triangle</div>
-            </div>
+            <div class="mini" onclick="playWaveform('sine')" title="Play sine"><div class="oscilloscope"><canvas id="miniSine" class="waveform-canvas" width="300" height="120"></canvas><div class="scanline"></div></div><div class="mini-label">Sine</div></div>
+            <div class="mini" onclick="playWaveform('square')" title="Play square"><div class="oscilloscope"><canvas id="miniSquare" class="waveform-canvas" width="300" height="120"></canvas><div class="scanline"></div></div><div class="mini-label">Square</div></div>
+            <div class="mini" onclick="playWaveform('sawtooth')" title="Play sawtooth"><div class="oscilloscope"><canvas id="miniSaw" class="waveform-canvas" width="300" height="120"></canvas><div class="scanline"></div></div><div class="mini-label">Sawtooth</div></div>
+            <div class="mini" onclick="playWaveform('triangle')" title="Play triangle"><div class="oscilloscope"><canvas id="miniTriangle" class="waveform-canvas" width="300" height="120"></canvas><div class="scanline"></div></div><div class="mini-label">Triangle</div></div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- INTRO -->
-    <section class="panel">
-      <h3>🌊 Introduction to Waveforms</h3>
-      <div class="section-text">
-        <p>In the world of electronic music and synthesis, everything starts with four basic waveforms. An Oscillator(sound source) contains these waveforms These are the fundamental shapes that oscillators create, and they form the foundation of virtually every synthesized sound you've ever heard. Each waveform has its own unique character, harmonic content, and musical applications.</p>
-        <p>Think of these waveforms as different "flavors" of sound - each one provides a distinct starting point that can be sculpted, filtered, and modulated to create the infinite variety of sounds we hear in electronic music, film scores, and sound design.</p>
       </div>
     </section>
 
@@ -204,95 +147,51 @@
         <div class="wave-title"><span class="tag">SINE</span><h3>🔵 Sine Wave - The Pure Foundation</h3></div>
         <div class="oscilloscope"><canvas id="sineCanvas" class="waveform-canvas" height="180"></canvas><div class="scanline"></div></div>
         <div class="controls"><button class="btn" onclick="playWaveform('sine')">🎵 Play Sine Wave</button></div>
-        <div class="char-grid">
-          <div class="char-card"><h4>🎯 Sound Character</h4><p>Pure, smooth tones. A sinewave creates the well known 808 bass. Contains only the fundamental frequency with no harmonics.</p></div>
-          <div class="char-card"><h4>🔬 Harmonic Content</h4><p>Only the fundamental frequency; the mathematical basis for all other sounds.</p></div>
-          <div class="char-card"><h4>🎹 Musical Applications</h4><p>Sub-bass, pure bells, FM synth carriers/modulators.</p></div>
-          <div class="char-card"><h4>⚡ Synthesis Use</h4><p>Great for clean sources or as modulators.</p></div>
-        </div>
       </article>
-
       <article class="panel wave-card">
         <div class="wave-title"><span class="tag">SQUARE</span><h3>⬜ Square Wave - The Bold Fundamental</h3></div>
         <div class="oscilloscope"><canvas id="squareCanvas" class="waveform-canvas" height="180"></canvas><div class="scanline"></div></div>
         <div class="controls"><button class="btn" onclick="playWaveform('square')">🎵 Play Square Wave</button></div>
-        <div class="char-grid">
-          <div class="char-card"><h4>🎯 Character</h4><p>Bold, hollow; classic retro game vibe.</p></div>
-          <div class="char-card"><h4>🔬 Harmonics</h4><p>Odd harmonics only.</p></div>
-          <div class="char-card"><h4>🎹 Uses</h4><p>Organs, leads, chiptune.</p></div>
-          <div class="char-card"><h4>⚡ Use</h4><p>Low-pass friendly, responds to filtering.</p></div>
-        </div>
       </article>
-
       <article class="panel wave-card">
         <div class="wave-title"><span class="tag">SAW</span><h3>🔺 Sawtooth Wave - The Harmonic Powerhouse</h3></div>
         <div class="oscilloscope"><canvas id="sawCanvas" class="waveform-canvas" height="180"></canvas><div class="scanline"></div></div>
         <div class="controls"><button class="btn" onclick="playWaveform('sawtooth')">🎵 Play Sawtooth Wave</button></div>
-        <div class="char-grid">
-          <div class="char-card"><h4>🎯 Character</h4><p>Bright, buzzy, aggressive.</p></div>
-          <div class="char-card"><h4>🔬 Harmonics</h4><p>All harmonics present; amplitude ~ 1/n.</p></div>
-          <div class="char-card"><h4>🎹 Uses</h4><p>Brass, strings, basses, leads.</p></div>
-          <div class="char-card"><h4>⚡ Use</h4><p>Subtractive workhorse.</p></div>
-        </div>
       </article>
-
       <article class="panel wave-card">
         <div class="wave-title"><span class="tag">TRIANGLE</span><h3>🔺 Triangle Wave - The Smooth Alternative</h3></div>
         <div class="oscilloscope"><canvas id="triangleCanvas" class="waveform-canvas" height="180"></canvas><div class="scanline"></div></div>
         <div class="controls"><button class="btn" onclick="playWaveform('triangle')">🎵 Play Triangle Wave</button></div>
-        <div class="char-grid">
-          <div class="char-card"><h4>🎯 Character</h4><p>Smoother than square; mellow.</p></div>
-          <div class="char-card"><h4>🔬 Harmonics</h4><p>Odd harmonics falling ~ 1/n².</p></div>
-          <div class="char-card"><h4>🎹 Uses</h4><p>Flute-like leads, pads.</p></div>
-          <div class="char-card"><h4>⚡ Use</h4><p>Between sine and square.</p></div>
-        </div>
       </article>
     </section>
 
     <!-- ADSR -->
     <section class="adsr-section">
       <h2>📈 ADSR Envelope — Shaping Sound Over Time</h2>
-      <p class="section-text" style="text-align:center">Press and HOLD on the graph (or hold “Z”) to play; release to trigger Release.</p>
+      <p class="section-text" style="text-align:center">Press & HOLD on the graph (or hold “Z”) to gate; release to trigger Release.</p>
       <div class="envelope-visual"><canvas class="waveform-canvas" id="envelopeCanvas"></canvas><div class="scanline"></div></div>
       <div class="synth-panel">
         <div class="knob-container">
-          <div class="knob-group">
-            <div class="knob-label">Attack</div>
-            <div class="knob" data-param="attack"><input type="range" class="knob-input" id="attackKnob" min="1" max="2000" value="100" oninput="updateKnob('attack', this.value)"></div>
-            <div class="knob-value" id="attackValue">100ms</div>
-          </div>
-          <div class="knob-group">
-            <div class="knob-label">Decay</div>
-            <div class="knob" data-param="decay"><input type="range" class="knob-input" id="decayKnob" min="1" max="2000" value="300" oninput="updateKnob('decay', this.value)"></div>
-            <div class="knob-value" id="decayValue">300ms</div>
-          </div>
-          <div class="knob-group">
-            <div class="knob-label">Sustain</div>
-            <div class="knob" data-param="sustain"><input type="range" class="knob-input" id="sustainKnob" min="0" max="100" value="60" oninput="updateKnob('sustain', this.value)"></div>
-            <div class="knob-value" id="sustainValue">60%</div>
-          </div>
-          <div class="knob-group">
-            <div class="knob-label">Release</div>
-            <div class="knob" data-param="release"><input type="range" class="knob-input" id="releaseKnob" min="10" max="3000" value="500" oninput="updateKnob('release', this.value)"></div>
-            <div class="knob-value" id="releaseValue">500ms</div>
-          </div>
+          <div class="knob-group"><div class="knob-label">Attack</div><div class="knob" data-param="attack"><input type="range" class="knob-input" id="attackKnob" min="1" max="2000" value="100"></div><div class="knob-value" id="attackValue">100ms</div></div>
+          <div class="knob-group"><div class="knob-label">Decay</div><div class="knob" data-param="decay"><input type="range" class="knob-input" id="decayKnob" min="1" max="2000" value="300"></div><div class="knob-value" id="decayValue">300ms</div></div>
+          <div class="knob-group"><div class="knob-label">Sustain</div><div class="knob" data-param="sustain"><input type="range" class="knob-input" id="sustainKnob" min="0" max="100" value="60"></div><div class="knob-value" id="sustainValue">60%</div></div>
+          <div class="knob-group"><div class="knob-label">Release</div><div class="knob" data-param="release"><input type="range" class="knob-input" id="releaseKnob" min="10" max="3000" value="500"></div><div class="knob-value" id="releaseValue">500ms</div></div>
         </div>
       </div>
-      <div style="text-align:center;margin:16px 0"><button class="play-adsr" onclick="playWithEnvelope()">🎵 Play one-shot ADSR</button></div>
+      <div style="text-align:center;margin:16px 0"><button class="play-adsr" id="adsrOnce">🎵 Play one-shot ADSR</button></div>
     </section>
 
     <!-- FILTER -->
     <section class="filter-section">
       <h2>🎛️ Filter — Sculpting Your Sound</h2>
-      <p class="section-text" style="text-align:center">Remove or emphasize frequencies to shape the character of your waveform.</p>
       <div class="filter-response"><canvas class="waveform-canvas" id="filterCanvas"></canvas><div class="scanline"></div></div>
       <div class="synth-panel">
         <div class="knob-container">
-          <div class="knob-group"><div class="knob-label">Cutoff</div><div class="knob" data-param="cutoff"><input type="range" class="knob-input" id="cutoffKnob" min="200" max="8000" value="2000" oninput="updateKnob('cutoff', this.value)"></div><div class="knob-value" id="cutoffValue">2.0 kHz</div></div>
-          <div class="knob-group"><div class="knob-label">Resonance</div><div class="knob" data-param="resonance"><input type="range" class="knob-input" id="resonanceKnob" min="0" max="30" value="5" oninput="updateKnob('resonance', this.value)"></div><div class="knob-value" id="resonanceValue">5 dB</div></div>
+          <div class="knob-group"><div class="knob-label">Cutoff</div><div class="knob" data-param="cutoff"><input type="range" class="knob-input" id="cutoffKnob" min="200" max="8000" value="2000"></div><div class="knob-value" id="cutoffValue">2.0 kHz</div></div>
+          <div class="knob-group"><div class="knob-label">Resonance</div><div class="knob" data-param="resonance"><input type="range" class="knob-input" id="resonanceKnob" min="0" max="30" value="5"></div><div class="knob-value" id="resonanceValue">5 dB</div></div>
           <div class="knob-group">
             <div class="knob-label">Type</div>
-            <select id="filterTypeSelect" onchange="updateFilterType()" style="background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px;font-weight:700;width:140px">
+            <select id="filterTypeSelect" style="background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px;font-weight:700;width:140px">
               <option value="lowpass">Low-pass</option>
               <option value="highpass">High-pass</option>
               <option value="bandpass">Band-pass</option>
@@ -300,13 +199,12 @@
           </div>
         </div>
       </div>
-      <div style="text-align:center;margin:16px 0"><button class="play-filter" onclick="playWithFilter()">🔊 Play with Filter</button></div>
+      <div style="text-align:center;margin:16px 0"><button class="play-filter" id="filterPlay">🔊 Play with Filter</button></div>
     </section>
 
     <!-- MINI SYNTH -->
     <section class="synthesis-playground">
       <h2>🎮 Mini Synthesizer — Put It All Together!</h2>
-      <p class="section-text" style="text-align:center">Combine waveforms, envelopes, and filters to craft a patch.</p>
       <div class="synth-panel">
         <h3 class="module-title" style="text-align:center">Oscillator</h3>
         <div class="waveform-selector" id="oscSelector">
@@ -316,48 +214,31 @@
           <div class="wave-button" onclick="selectWaveform('sine', event)">Sine</div>
         </div>
         <div class="knob-container" style="margin-top:18px">
-          <div class="knob-group"><div class="knob-label">Filter Cutoff</div><div class="knob" data-param="synthCutoff"><input type="range" class="knob-input" id="synthCutoffKnob" min="200" max="8000" value="3000" oninput="updateKnob('synthCutoff', this.value)"></div><div class="knob-value" id="synthCutoffValue">3.0 kHz</div></div>
-          <div class="knob-group"><div class="knob-label">Resonance</div><div class="knob" data-param="synthRes"><input type="range" class="knob-input" id="synthResKnob" min="0" max="20" value="3" oninput="updateKnob('synthRes', this.value)"></div><div class="knob-value" id="synthResValue">3 dB</div></div>
-          <div class="knob-group"><div class="knob-label">Env→Filter</div><div class="knob" data-param="envAmount"><input type="range" class="knob-input" id="envAmountKnob" min="0" max="100" value="50" oninput="updateKnob('envAmount', this.value)"></div><div class="knob-value" id="envAmountValue">50%</div></div>
-          <div class="knob-group"><div class="knob-label">Volume</div><div class="knob" data-param="volume"><input type="range" class="knob-input" id="volumeKnob" min="0" max="100" value="70" oninput="updateKnob('volume', this.value)"></div><div class="knob-value" id="volumeValue">70%</div></div>
+          <div class="knob-group"><div class="knob-label">Filter Cutoff</div><div class="knob" data-param="synthCutoff"><input type="range" class="knob-input" id="synthCutoffKnob" min="200" max="8000" value="3000"></div><div class="knob-value" id="synthCutoffValue">3.0 kHz</div></div>
+          <div class="knob-group"><div class="knob-label">Resonance</div><div class="knob" data-param="synthRes"><input type="range" class="knob-input" id="synthResKnob" min="0" max="20" value="3"></div><div class="knob-value" id="synthResValue">3 dB</div></div>
+          <div class="knob-group"><div class="knob-label">Env→Filter</div><div class="knob" data-param="envAmount"><input type="range" class="knob-input" id="envAmountKnob" min="0" max="100" value="50"></div><div class="knob-value" id="envAmountValue">50%</div></div>
+          <div class="knob-group"><div class="knob-label">Volume</div><div class="knob" data-param="volume"><input type="range" class="knob-input" id="volumeKnob" min="0" max="100" value="70"></div><div class="knob-value" id="volumeValue">70%</div></div>
         </div>
       </div>
-      <div style="text-align:center;margin:18px 0"><button class="big-play-btn" onclick="playSynthSound()">🚀 Play Synthesizer</button></div>
-      <div class="synth-panel">
-        <h4 class="module-title" style="text-align:center">🎯 Preset Sounds</h4>
-        <div class="examples-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
-          <button class="wave-button" onclick="loadPreset('lead')">Lead</button>
-          <button class="wave-button" onclick="loadPreset('bass')">Bass</button>
-          <button class="wave-button" onclick="loadPreset('pad')">Pad</button>
-          <button class="wave-button" onclick="loadPreset('pluck')">Pluck</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel">
-      <h3>🎓 Mastering Waveform Fundamentals</h3>
-      <div class="section-text">
-        <p>These waveforms are the alphabet of electronic sound. Combine with filters, envelopes, and modulation for infinite variety.</p>
-        <p style="font-weight:700;color:var(--accent)">Choosing the right waveform is about context and intent.</p>
-      </div>
+      <div style="text-align:center;margin:18px 0"><button class="big-play-btn" id="synthPlay">🚀 Play Synthesizer</button></div>
     </section>
 
     <footer>
-      <div>Tip: Press <span class="mono">1/2/3/4</span> to play Sine/Square/Saw/Triangle. Hold <span class="mono">Z</span> for ADSR Gate. Use <span class="mono">Shift</span> for fine knob moves; trackpad/mouse wheel works too.</div>
+      <div>Tip: 1/2/3/4 = Sine/Square/Saw/Triangle. Hold “Z” or press/hold the ADSR graph. Shift = fine knob. Wheel = nudge. Double-click a knob = reset.</div>
       <div id="status" class="mono">Audio: idle</div>
     </footer>
   </div>
 
   <script>
-    // --- Audio engine ---
-    let audioContext; let currentOsc = null; let currentGain = null; let currentFilter = null; let currentFreq = 220;
-    const statusEl = document.getElementById('status');
-    const freqSlider = document.getElementById('freqSlider');
-    const freqDisplay = document.getElementById('freqDisplay');
+    // ========= Audio core =========
+    let audioContext; let currentOsc=null, currentGain=null, currentFilter=null, currentFreq=220;
+    const statusEl=document.getElementById('status');
+    const freqSlider=document.getElementById('freqSlider');
+    const freqDisplay=document.getElementById('freqDisplay');
 
     function ensureAudio(){ if(!audioContext){ audioContext = new (window.AudioContext||window.webkitAudioContext)(); } return audioContext; }
     function setStatus(t){ if(statusEl) statusEl.textContent = t; }
-    function stopCurrent(time = 0.02){
+    function stopCurrent(time=0.02){
       if(!audioContext) return;
       if(currentGain){ try{ currentGain.gain.cancelScheduledValues(audioContext.currentTime);}catch(e){}
         try{ currentGain.gain.setTargetAtTime(0.0001, audioContext.currentTime, time);}catch(e){} }
@@ -366,235 +247,72 @@
 
     function playWaveform(type){
       ensureAudio(); stopCurrent();
-      const osc = audioContext.createOscillator(); const gain = audioContext.createGain();
-      osc.type = type; osc.frequency.value = currentFreq; gain.gain.value = 0.0001;
-      const filter = audioContext.createBiquadFilter(); filter.type='lowpass'; filter.frequency.value = 16000;
-      osc.connect(filter); filter.connect(gain); gain.connect(audioContext.destination);
-      const now = audioContext.currentTime; gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.18, now + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.01, now + 1.8);
-      osc.start(); osc.stop(now + 2.2);
-      currentOsc = osc; currentGain = gain; setStatus(`Playing ${type} @ ${currentFreq}Hz`);
+      const osc=audioContext.createOscillator(), gain=audioContext.createGain(), filt=audioContext.createBiquadFilter();
+      osc.type=type; osc.frequency.value=currentFreq; gain.gain.value=0.0001; filt.type='lowpass'; filt.frequency.value=16000;
+      osc.connect(filt); filt.connect(gain); gain.connect(audioContext.destination);
+      const now=audioContext.currentTime; gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.18, now + 0.05); gain.gain.exponentialRampToValueAtTime(0.01, now + 1.8);
+      osc.start(); osc.stop(now + 2.2); currentOsc=osc; currentGain=gain; setStatus(`Playing ${type} @ ${currentFreq}Hz`);
     }
 
     function updateFrequency(val){ currentFreq = parseInt(val,10); if(freqDisplay) freqDisplay.textContent = `${currentFreq} Hz`; drawAll(); }
-    if(freqSlider){ freqSlider.addEventListener('input', (e)=> updateFrequency(e.target.value)); }
+    if(freqSlider) freqSlider.addEventListener('input', e=> updateFrequency(e.target.value));
 
-    // Keyboard shortcuts 1-4 + ADSR gate (Z)
-    const downKeys = new Set();
-    window.addEventListener('keydown', (e)=>{
+    // Keys
+    const downKeys=new Set();
+    window.addEventListener('keydown', e=>{
       if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
-      const map={ '1':'sine','2':'square','3':'sawtooth','4':'triangle'};
-      if(map[e.key]){ playWaveform(map[e.key]); return; }
+      const map={'1':'sine','2':'square','3':'sawtooth','4':'triangle'}; if(map[e.key]) return playWaveform(map[e.key]);
       if(e.key.toLowerCase()==='z' && !downKeys.has('z')){ downKeys.add('z'); startADSRNote(); }
     });
-    window.addEventListener('keyup', (e)=>{
-      if(e.key.toLowerCase()==='z'){ downKeys.delete('z'); releaseADSRNote(); }
-    });
+    window.addEventListener('keyup', e=>{ if(e.key.toLowerCase()==='z'){ downKeys.delete('z'); releaseADSRNote(); } });
 
-    // Toggle Glow (pause/resume gradient animation)
-    const themeToggle = document.getElementById('themeToggle');
-    const auroraEl = document.querySelector('.aurora');
-    let glowOn = true;
-    if(themeToggle){
-      themeToggle.addEventListener('click', ()=>{
-        glowOn = !glowOn;
-        auroraEl.classList.toggle('paused', !glowOn);
-        themeToggle.textContent = glowOn ? 'Toggle Glow (ON)' : 'Toggle Glow (OFF)';
-      });
-    }
+    // Toggle Glow
+    const themeToggle=document.getElementById('themeToggle'); const auroraEl=document.querySelector('.aurora'); let glowOn=true;
+    if(themeToggle) themeToggle.addEventListener('click', ()=>{ glowOn=!glowOn; auroraEl.classList.toggle('paused', !glowOn); themeToggle.textContent = glowOn?'Toggle Glow (ON)':'Toggle Glow (OFF)'; });
 
     function scrollToInteractive(){ const el=document.getElementById('interactive'); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
 
-    // --- Drawing ---
+    // ========= Drawing =========
     function drawWave(canvasId, type, cycles=2){
       const canvas=document.getElementById(canvasId); if(!canvas) return;
       const dpr=Math.max(1, Math.min(2, window.devicePixelRatio||1));
       const rect=canvas.getBoundingClientRect(); canvas.width=rect.width*dpr; canvas.height=rect.height*dpr;
       const ctx=canvas.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
-      const w=rect.width,h=rect.height; const cx=h/2, amp=h*0.38;
+      const w=rect.width,h=rect.height,cx=h/2,amp=h*0.38;
       ctx.clearRect(0,0,w,h); ctx.fillStyle='#0e1524'; ctx.fillRect(0,0,w,h);
       ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(0,cx); ctx.lineTo(w,cx); ctx.stroke();
       ctx.lineWidth=2.5; ctx.shadowColor='rgba(0,229,255,.65)'; ctx.shadowBlur=8; ctx.strokeStyle='#75f6ff'; ctx.beginPath();
       for(let x=0;x<w;x++){ const t=(x/w)*cycles*Math.PI*2; let y=0;
-        switch(type){ case 'sine': y=Math.sin(t); break;
-          case 'square': y=Math.sin(t)>=0?1:-1; break;
-          case 'sawtooth': y=2*((t%(2*Math.PI))/(2*Math.PI))-1; break;
-          case 'triangle': const saw=2*((t%(2*Math.PI))/(2*Math.PI))-1; y=Math.abs(saw)*2-1; break; }
+        if(type==='sine') y=Math.sin(t);
+        else if(type==='square') y=Math.sin(t)>=0?1:-1;
+        else if(type==='sawtooth') y=2*((t%(2*Math.PI))/(2*Math.PI))-1;
+        else { const saw=2*((t%(2*Math.PI))/(2*Math.PI))-1; y=Math.abs(saw)*2-1; }
         const py=cx - y*amp; (x===0)?ctx.moveTo(x,py):ctx.lineTo(x,py);
       } ctx.stroke();
     }
     function drawAll(){
       drawWave('sineCanvas','sine'); drawWave('squareCanvas','square'); drawWave('sawCanvas','sawtooth'); drawWave('triangleCanvas','triangle');
       drawWave('miniSine','sine',2); drawWave('miniSquare','square',2); drawWave('miniSaw','sawtooth',2); drawWave('miniTriangle','triangle',2);
-      drawWave('cmpSine','sine',2); drawWave('cmpSquare','square',2); drawWave('cmpSaw','sawtooth',2); drawWave('cmpTriangle','triangle',2);
     }
 
-    // ==== Synth params & helpers ====
-    let selectedWaveform = 'sawtooth';
+    // ========= Synth Params =========
+    let selectedWaveform='sawtooth';
     const synthParams = {
-      attack: 0.1, decay: 0.3, sustain: 0.6, release: 0.5,
-      cutoff: 2000, resonance: 5, filterType: 'lowpass',
-      synthCutoff: 3000, synthRes: 3, envAmount: 0.5, volume: 0.7
+      attack:.1, decay:.3, sustain:.6, release:.5,
+      cutoff:2000, resonance:5, filterType:'lowpass',
+      synthCutoff:3000, synthRes:3, envAmount:.5, volume:.7
     };
 
-    function updateKnob(param, value){
-      const num = parseFloat(value);
-      const timeParams = ['attack','decay','release'];
-      if(param==='sustain' || param==='envAmount' || param==='volume'){ synthParams[param] = num/100; }
-      else if(timeParams.includes(param)){ synthParams[param] = num/1000; }
-      else { synthParams[param] = num; }
-      const out = (p=>{
-        if(['sustain','envAmount','volume'].includes(p)) return Math.round(num)+"%";
-        if(p.includes('cutoff')||p==='cutoff') return num>=1000 ? (num/1000).toFixed(1)+" kHz" : num+" Hz";
-        if(p.includes('res')) return num+" dB";
-        if(timeParams.includes(p)) return num+"ms";
-        return num;
-      })(param);
-      const el = document.getElementById(param+'Value'); if(el) el.textContent = out;
-      updateKnobRotation(param, value);
-      if(['attack','decay','sustain','release'].includes(param)) drawEnvelope();
-      if(['cutoff','resonance'].includes(param)) drawFilterResponse();
-    }
+    function selectWaveform(type, ev){ selectedWaveform=type; if(ev){ document.querySelectorAll('.wave-button').forEach(b=>b.classList.remove('active')); ev.target.classList.add('active'); } }
 
-    // rotate only the inner rotor
-    function updateKnobRotation(param, value){
-      const knob = document.querySelector(`.knob[data-param="${param}"]`);
-      if(!knob) return; const input = knob.querySelector('input'); const rotor = knob.querySelector('.rotor');
-      if(!input || !rotor) return;
-      const min=+input.min, max=+input.max;
-      const n=(value-min)/(max-min);
-      const rot=-140 + n*280;
-      rotor.style.transform = `rotate(${rot}deg)`;
-    }
-
-    function updateFilterType(){ const sel=document.getElementById('filterTypeSelect'); if(!sel) return; synthParams.filterType = sel.value; drawFilterResponse(); }
-    function selectWaveform(type, ev){ selectedWaveform = type; if(ev){ document.querySelectorAll('.wave-button').forEach(b=>b.classList.remove('active')); ev.target.classList.add('active'); } }
-
-    function playWithEnvelope(){ // one-shot button
-      ensureAudio(); stopCurrent();
-      const osc=audioContext.createOscillator(); const gain=audioContext.createGain();
-      osc.type='sawtooth'; osc.frequency.value=currentFreq; osc.connect(gain); gain.connect(audioContext.destination);
-      const now=audioContext.currentTime; const len=2.5; const maxG=0.22;
-      gain.gain.setValueAtTime(0,now);
-      gain.gain.linearRampToValueAtTime(maxG, now + synthParams.attack);
-      gain.gain.linearRampToValueAtTime(maxG*synthParams.sustain, now + synthParams.attack + synthParams.decay);
-      gain.gain.setValueAtTime(maxG*synthParams.sustain, now + len - synthParams.release);
-      gain.gain.exponentialRampToValueAtTime(0.0008, now + len);
-      osc.start(now); osc.stop(now + len);
-      currentOsc = osc; currentGain = gain; setStatus('ADSR one-shot');
-    }
-
-    // ADSR Gate (press/hold)
-    let envOsc=null, envGain=null, gateOn=false;
-    function startADSRNote(){
-      ensureAudio(); stopCurrent(0.005);
-      gateOn = true;
-      envOsc = audioContext.createOscillator();
-      envGain = audioContext.createGain();
-      envOsc.type='sawtooth'; envOsc.frequency.value=currentFreq;
-      envOsc.connect(envGain); envGain.connect(audioContext.destination);
-      const now=audioContext.currentTime; const maxG = Math.max(0.05, 0.4*synthParams.volume);
-      envGain.gain.cancelScheduledValues(now);
-      envGain.gain.setValueAtTime(0, now);
-      envGain.gain.linearRampToValueAtTime(maxG, now + synthParams.attack);
-      envGain.gain.linearRampToValueAtTime(maxG*synthParams.sustain, now + synthParams.attack + synthParams.decay);
-      envOsc.start(now);
-      currentOsc=envOsc; currentGain=envGain;
-      setStatus('ADSR Gate: ON');
-    }
-    function releaseADSRNote(){
-      if(!envGain || !envOsc || !audioContext) return;
-      gateOn = false;
-      const now=audioContext.currentTime;
-      const end=now + Math.max(0.03, synthParams.release);
-      try{
-        envGain.gain.cancelScheduledValues(now);
-        const cur = envGain.gain.value;
-        envGain.gain.setValueAtTime(cur, now);
-        envGain.gain.exponentialRampToValueAtTime(0.0008, end);
-        envOsc.stop(end + 0.02);
-      }catch(_){}
-      setStatus('ADSR Gate: OFF');
-    }
-
-    // Pointer play on envelope canvas + X scrubs pitch
-    const envCanvas = document.getElementById('envelopeCanvas');
-    if(envCanvas){
-      envCanvas.addEventListener('pointerdown', (e)=>{ e.preventDefault(); startADSRNote(); envCanvas.setPointerCapture(e.pointerId); });
-      envCanvas.addEventListener('pointerup',   (e)=>{ e.preventDefault(); releaseADSRNote(); envCanvas.releasePointerCapture(e.pointerId); });
-      envCanvas.addEventListener('pointercancel', ()=> releaseADSRNote());
-      envCanvas.addEventListener('pointermove', (e)=>{
-        if(!gateOn) return;
-        const rect = envCanvas.getBoundingClientRect();
-        const x = Math.max(0, Math.min(1, (e.clientX - rect.left)/rect.width));
-        const f = 100 + x*(800-100);
-        currentFreq = Math.round(f);
-        if(freqSlider){ freqSlider.value = currentFreq; updateFrequency(currentFreq); }
-        if(envOsc){ envOsc.frequency.setValueAtTime(currentFreq, audioContext.currentTime); }
-      });
-    }
-
-    function playWithFilter(){
-      ensureAudio(); stopCurrent();
-      const osc=audioContext.createOscillator(); const gain=audioContext.createGain(); const filt=audioContext.createBiquadFilter();
-      osc.type='sawtooth'; osc.frequency.value=currentFreq; filt.type=synthParams.filterType; filt.frequency.value=synthParams.cutoff; filt.Q.value=synthParams.resonance;
-      osc.connect(filt); filt.connect(gain); gain.connect(audioContext.destination);
-      const now=audioContext.currentTime; gain.gain.setValueAtTime(0, now);
-      gain.gain.exponentialRampToValueAtTime(0.18, now + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.0008, now + 2.6);
-      osc.start(now); osc.stop(now + 2.8);
-      currentOsc=osc; currentGain=gain; currentFilter=filt;
-      setStatus('Filter demo');
-    }
-
-    function playSynthSound(){
-      ensureAudio(); stopCurrent();
-      const osc=audioContext.createOscillator(); const gain=audioContext.createGain(); const filt=audioContext.createBiquadFilter();
-      osc.type=selectedWaveform; osc.frequency.value=currentFreq;
-      filt.type='lowpass'; filt.frequency.value=synthParams.synthCutoff; filt.Q.value=synthParams.synthRes;
-      osc.connect(filt); filt.connect(gain); gain.connect(audioContext.destination);
-      const now=audioContext.currentTime; const len=2.6; const maxG = Math.max(0.05, Math.min(0.5, synthParams.volume));
-      gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(maxG, now + synthParams.attack);
-      gain.gain.linearRampToValueAtTime(maxG*synthParams.sustain, now + synthParams.attack + synthParams.decay);
-      gain.gain.setValueAtTime(maxG*synthParams.sustain, now + len - synthParams.release);
-      gain.gain.exponentialRampToValueAtTime(0.0008, now + len);
-      const startCut = Math.max(40, synthParams.synthCutoff*0.35);
-      const peak = synthParams.synthCutoff * (1 + synthParams.envAmount);
-      filt.frequency.setValueAtTime(startCut, now);
-      filt.frequency.linearRampToValueAtTime(peak, now + synthParams.attack);
-      filt.frequency.linearRampToValueAtTime(startCut + (peak-startCut)*synthParams.sustain, now + synthParams.attack + synthParams.decay);
-      filt.frequency.setValueAtTime(startCut + (peak-startCut)*synthParams.sustain, now + len - synthParams.release);
-      filt.frequency.exponentialRampToValueAtTime(Math.max(30, startCut), now + len);
-      osc.start(now); osc.stop(now + len);
-      currentOsc=osc; currentGain=gain; currentFilter=filt;
-      setStatus('Mini synth');
-    }
-
-    function loadPreset(name){
-      const presets={
-        lead:{waveform:'sawtooth', attack:50,decay:200,sustain:80,release:300, synthCutoff:4000,synthRes:8,envAmount:70,volume:75},
-        bass:{waveform:'sawtooth', attack:10,decay:400,sustain:40,release:200, synthCutoff:800,synthRes:5,envAmount:30,volume:85},
-        pad:{waveform:'sawtooth', attack:800,decay:600,sustain:70,release:1200, synthCutoff:1500,synthRes:2,envAmount:40,volume:60},
-        pluck:{waveform:'sawtooth', attack:5,decay:300,sustain:10,release:100, synthCutoff:5000,synthRes:12,envAmount:80,volume:70}
-      }[name]; if(!presets) return;
-      const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.value = val; };
-      set('attackKnob', presets.attack); set('decayKnob', presets.decay); set('sustainKnob', presets.sustain); set('releaseKnob', presets.release);
-      set('synthCutoffKnob', presets.synthCutoff); set('synthResKnob', presets.synthRes); set('envAmountKnob', presets.envAmount); set('volumeKnob', presets.volume);
-      selectWaveform(presets.waveform);
-      updateKnob('attack', presets.attack); updateKnob('decay', presets.decay); updateKnob('sustain', presets.sustain); updateKnob('release', presets.release);
-      updateKnob('synthCutoff', presets.synthCutoff); updateKnob('synthRes', presets.synthRes); updateKnob('envAmount', presets.envAmount); updateKnob('volume', presets.volume);
-      setTimeout(()=>playSynthSound(), 100);
-    }
-
-    // Visualizers
+    // ========= Visualizers =========
     function drawEnvelope(){
       const canvas=document.getElementById('envelopeCanvas'); if(!canvas) return;
       const ctx=canvas.getContext('2d'); const w=canvas.width=canvas.clientWidth; const h=canvas.height=200;
       ctx.fillStyle='#0e1524'; ctx.fillRect(0,0,w,h);
       const sustainTime=1; const total=synthParams.attack + synthParams.decay + sustainTime + synthParams.release;
-      const ax=(synthParams.attack/total)*w; const dx=ax + (synthParams.decay/total)*w; const sx=dx + (sustainTime/total)*w; const rx=w;
+      const ax=(synthParams.attack/total)*w, dx=ax + (synthParams.decay/total)*w, sx=dx + (sustainTime/total)*w, rx=w;
       const sy=20 + (160*(1 - synthParams.sustain));
       ctx.strokeStyle='#ff9b4a'; ctx.lineWidth=3; ctx.beginPath();
       ctx.moveTo(0,h-10); ctx.lineTo(ax,20); ctx.lineTo(dx,sy); ctx.lineTo(sx,sy); ctx.lineTo(rx,h-10); ctx.stroke();
@@ -616,99 +334,222 @@
       ctx.stroke(); const cx=(Math.log10(synthParams.cutoff)-1)/4 * w; ctx.setLineDash([5,5]); ctx.strokeStyle='#ff5e1a'; ctx.beginPath(); ctx.moveTo(cx,0); ctx.lineTo(cx,h); ctx.stroke(); ctx.setLineDash([]);
     }
 
-    // --- Ensure rotors exist (so we don't edit HTML) ---
-    function ensureRotors(){
-      document.querySelectorAll('.knob').forEach(k=>{
-        if(!k.querySelector('.rotor')){
-          const r=document.createElement('div'); r.className='rotor';
-          const inp=k.querySelector('input'); if(inp) k.insertBefore(r, inp); else k.appendChild(r);
-        }
+    // ========= Knob Manager (single source of truth) =========
+    class KnobManager{
+      constructor(){
+        this.knobs=new Map();
+        this.ANG_MIN=-140; this.ANG_MAX=140;
+        this.PX_PER_RANGE=200; this.FINE=0.2;
+        this.raf=null;
+        this._bindAll();
+      }
+      _bindAll(){
+        document.querySelectorAll('.knob').forEach(k=>{
+          if(!k.querySelector('.rotor')){ const r=document.createElement('div'); r.className='rotor'; const inp=k.querySelector('input'); if(inp) k.insertBefore(r, inp); }
+          const rotor=k.querySelector('.rotor'); const input=k.querySelector('input'); const param=k.dataset.param;
+          const data={
+            el:k, rotor, input, param,
+            min:+input.min, max:+input.max,
+            step: this._inferStep(param),
+            value:+input.value,
+            dragging:false, startY:0, startVal:0
+          };
+          this.knobs.set(param, data);
+
+          // Init visual
+          this._render(param, data.value);
+
+          // Events: vertical drag
+          k.addEventListener('pointerdown', e=>{
+            data.dragging=true; data.startY=e.clientY; data.startVal=data.value;
+            k.setPointerCapture(e.pointerId); k.classList.add('grabbing'); e.preventDefault();
+          });
+          k.addEventListener('pointermove', e=>{
+            if(!data.dragging) return;
+            const dy = data.startY - e.clientY; // up = increase
+            const scale = (data.max - data.min)/this.PX_PER_RANGE;
+            const fine = e.shiftKey ? this.FINE : 1;
+            const next = this._quantize(data, data.startVal + dy*scale*fine);
+            this._schedule(()=> this.set(param, next, 'drag'));
+          });
+          const end=()=>{ if(!data.dragging) return; data.dragging=false; k.classList.remove('grabbing'); try{k.releasePointerCapture?.();}catch(_){} };
+          k.addEventListener('pointerup', end); k.addEventListener('pointercancel', end);
+
+          // Mouse wheel
+          k.addEventListener('wheel', e=>{
+            e.preventDefault();
+            const delta = -e.deltaY;
+            const scale = (data.max - data.min)/600;
+            const fine = e.shiftKey ? this.FINE : 1;
+            const next = this._quantize(data, data.value + delta*scale*fine);
+            this._schedule(()=> this.set(param, next, 'wheel'));
+          }, {passive:false});
+
+          // Double click reset
+          k.addEventListener('dblclick', ()=>{
+            const def = this._defaultFor(param);
+            this.set(param, def, 'reset');
+          });
+
+          // Slider fallback (if someone drags the hidden range via keyboard)
+          input.addEventListener('input', ()=>{
+            // Do NOT call updateKnob here; the manager is the only source of truth.
+            const v = this._quantize(data, +input.value);
+            this.set(param, v, 'slider');
+          });
+        });
+      }
+      _inferStep(param){
+        if(['sustain','envAmount','volume'].includes(param)) return 1;        // %
+        if(['attack','decay','release'].includes(param)) return 1;            // ms
+        if(['resonance'].includes(param)) return 0.1;
+        return 1; // default Hz or generic
+      }
+      _defaultFor(param){
+        const defaults={attack:100,decay:300,sustain:60,release:500, cutoff:2000,resonance:5, synthCutoff:3000,synthRes:3,envAmount:50,volume:70};
+        return (defaults[param]!=null)?defaults[param]:+this.knobs.get(param)?.input?.value||0;
+      }
+      _clamp(d,v){ return Math.max(d.min, Math.min(d.max, v)); }
+      _quantize(d,v){ const step=d.step||1; return Math.round(this._clamp(d,v)/step)*step; }
+      _valueToAngle(d,val){ const n=(val - d.min)/(d.max - d.min); return this.ANG_MIN + n*(this.ANG_MAX - this.ANG_MIN); }
+      _fmt(param, val){
+        if(['sustain','envAmount','volume'].includes(param)) return Math.round(val)+"%";
+        if(param.includes('cutoff')) return val>=1000 ? (val/1000).toFixed(1)+" kHz" : Math.round(val)+" Hz";
+        if(param.includes('res')) return (Math.round(val*10)/10)+" dB";
+        if(['attack','decay','release'].includes(param)) return Math.round(val)+"ms";
+        return val;
+      }
+      _applyToParams(param, val){
+        const num=+val;
+        if(['sustain','envAmount','volume'].includes(param)) synthParams[param]=num/100;
+        else if(['attack','decay','release'].includes(param)) synthParams[param]=num/1000;
+        else synthParams[param]=num;
+        if(['attack','decay','sustain','release'].includes(param)) drawEnvelope();
+        if(['cutoff','resonance'].includes(param)) drawFilterResponse();
+        // synth knobs update text too
+      }
+      _render(param, val){
+        const d=this.knobs.get(param); if(!d) return;
+        d.value=val; d.input.value=val;
+        d.rotor.style.transform = `rotate(${this._valueToAngle(d,val)}deg)`;
+        const label=document.getElementById(param+'Value'); if(label) label.textContent=this._fmt(param, val);
+      }
+      _schedule(fn){ if(this.raf!=null) return; this.raf=requestAnimationFrame(()=>{ this.raf=null; fn(); }); }
+      set(param, val, src='code'){
+        const d=this.knobs.get(param); if(!d) return;
+        const q=this._quantize(d,val);
+        if(q===d.value) return;
+        this._render(param, q);
+        this._applyToParams(param, q);
+      }
+    }
+
+    const knobs = new KnobManager();
+
+    // ========= UI actions & audio demos =========
+    document.getElementById('adsrOnce').addEventListener('click', ()=>playWithEnvelope());
+    document.getElementById('filterPlay').addEventListener('click', ()=>playWithFilter());
+    document.getElementById('synthPlay').addEventListener('click', ()=>playSynthSound());
+
+    function playWithEnvelope(){
+      ensureAudio(); stopCurrent();
+      const osc=audioContext.createOscillator(), gain=audioContext.createGain();
+      osc.type='sawtooth'; osc.frequency.value=currentFreq;
+      osc.connect(gain); gain.connect(audioContext.destination);
+      const now=audioContext.currentTime; const len=2.5; const maxG=0.22;
+      gain.gain.setValueAtTime(0,now);
+      gain.gain.linearRampToValueAtTime(maxG, now + synthParams.attack);
+      gain.gain.linearRampToValueAtTime(maxG*synthParams.sustain, now + synthParams.attack + synthParams.decay);
+      gain.gain.setValueAtTime(maxG*synthParams.sustain, now + len - synthParams.release);
+      gain.gain.exponentialRampToValueAtTime(0.0008, now + len);
+      osc.start(now); osc.stop(now + len);
+      currentOsc=osc; currentGain=gain; setStatus('ADSR one-shot');
+    }
+
+    let envOsc=null, envGain=null, gateOn=false;
+    function startADSRNote(){
+      ensureAudio(); stopCurrent(0.005); gateOn=true;
+      envOsc=audioContext.createOscillator(); envGain=audioContext.createGain();
+      envOsc.type='sawtooth'; envOsc.frequency.value=currentFreq;
+      envOsc.connect(envGain); envGain.connect(audioContext.destination);
+      const now=audioContext.currentTime; const maxG=Math.max(0.05, 0.4*synthParams.volume);
+      envGain.gain.cancelScheduledValues(now);
+      envGain.gain.setValueAtTime(0, now);
+      envGain.gain.linearRampToValueAtTime(maxG, now + synthParams.attack);
+      envGain.gain.linearRampToValueAtTime(maxG*synthParams.sustain, now + synthParams.attack + synthParams.decay);
+      envOsc.start(now); currentOsc=envOsc; currentGain=envGain; setStatus('ADSR Gate: ON');
+    }
+    function releaseADSRNote(){
+      if(!envGain||!envOsc||!audioContext) return; gateOn=false;
+      const now=audioContext.currentTime, end=now + Math.max(0.03, synthParams.release);
+      try{
+        envGain.gain.cancelScheduledValues(now);
+        const cur=envGain.gain.value;
+        envGain.gain.setValueAtTime(cur, now);
+        envGain.gain.exponentialRampToValueAtTime(0.0008, end);
+        envOsc.stop(end + 0.02);
+      }catch(_){}
+      setStatus('ADSR Gate: OFF');
+    }
+
+    const envCanvas=document.getElementById('envelopeCanvas');
+    if(envCanvas){
+      envCanvas.addEventListener('pointerdown', e=>{ e.preventDefault(); startADSRNote(); envCanvas.setPointerCapture(e.pointerId); });
+      envCanvas.addEventListener('pointerup',   e=>{ e.preventDefault(); releaseADSRNote(); envCanvas.releasePointerCapture(e.pointerId); });
+      envCanvas.addEventListener('pointercancel', ()=> releaseADSRNote());
+      envCanvas.addEventListener('pointermove', e=>{
+        if(!gateOn) return;
+        const r=envCanvas.getBoundingClientRect(); const x=Math.max(0, Math.min(1,(e.clientX-r.left)/r.width));
+        const f=100 + x*(800-100); currentFreq=Math.round(f);
+        if(freqSlider){ freqSlider.value=currentFreq; updateFrequency(currentFreq); }
+        if(envOsc){ envOsc.frequency.setValueAtTime(currentFreq, audioContext.currentTime); }
       });
     }
 
-    // --- DAW-style vertical dragging + wheel nudging (rAF throttled) ---
-    function setupKnobDragging(){
-      const ANG_MIN = -140, ANG_MAX = 140; // for the rotor display only
-      const PX_PER_FULL_RANGE = 200;       // vertical pixels to sweep min->max
-      const FINE_FACTOR = 0.2;             // shift slows to 20%
-      let rafId = null;
-
-      const schedule = (fn)=>{ if(rafId!=null) return; rafId = requestAnimationFrame(()=>{ rafId=null; fn(); }); };
-
-      document.querySelectorAll('.knob').forEach(knob=>{
-        const input = knob.querySelector('input'); const rotor = knob.querySelector('.rotor');
-        if(!input || !rotor) return;
-
-        const min=+input.min, max=+input.max;
-        const valueToAngle = (val)=> {
-          const n = (val - min)/(max - min);
-          return ANG_MIN + n*(ANG_MAX - ANG_MIN);
-        };
-        const clamp = (v)=> Math.max(min, Math.min(max, v));
-
-        let dragging=false, ptrId=null, startY=0, startVal=0;
-
-        function applyValue(v){
-          const val = clamp(v);
-          input.value = val;
-          rotor.style.transform = `rotate(${valueToAngle(val)}deg)`;
-          updateKnob(knob.dataset.param, val);
-        }
-
-        // Pointer drag (vertical)
-        knob.addEventListener('pointerdown', (e)=>{
-          dragging=true; ptrId=e.pointerId; knob.setPointerCapture(ptrId); knob.classList.add('grabbing');
-          startY = e.clientY;
-          startVal = +input.value;
-          e.preventDefault();
-        });
-        knob.addEventListener('pointermove', (e)=>{
-          if(!dragging) return;
-          const dy = startY - e.clientY; // up is positive
-          const scale = (max - min) / PX_PER_FULL_RANGE;
-          const fine = e.shiftKey ? FINE_FACTOR : 1;
-          const next = startVal + dy * scale * fine;
-          schedule(()=> applyValue(next));
-        });
-        function endDrag(){
-          if(!dragging) return;
-          dragging=false; knob.classList.remove('grabbing');
-          try{ knob.releasePointerCapture(ptrId);}catch(_){}
-          ptrId=null;
-        }
-        knob.addEventListener('pointerup', endDrag);
-        knob.addEventListener('pointercancel', endDrag);
-
-        // Wheel nudging (trackpad/mouse)
-        knob.addEventListener('wheel', (e)=>{
-          e.preventDefault();
-          const delta = -e.deltaY; // up -> increase
-          const scale = (max - min) / 600; // slower for wheel
-          const fine = e.shiftKey ? FINE_FACTOR : 1;
-          const next = (+input.value) + delta * scale * fine;
-          schedule(()=> applyValue(next));
-        }, {passive:false});
-
-        // Keep rotor synced on programmatic changes (presets/sliders)
-        input.addEventListener('input', ()=>{ rotor.style.transform = `rotate(${valueToAngle(+input.value)}deg)`; });
-
-        // Initialize angle from current value
-        rotor.style.transform = `rotate(${valueToAngle(+input.value)}deg)`;
-      });
+    function playWithFilter(){
+      ensureAudio(); stopCurrent();
+      const osc=audioContext.createOscillator(), gain=audioContext.createGain(), filt=audioContext.createBiquadFilter();
+      osc.type='sawtooth'; osc.frequency.value=currentFreq;
+      filt.type=synthParams.filterType; filt.frequency.value=synthParams.cutoff; filt.Q.value=synthParams.resonance;
+      osc.connect(filt); filt.connect(gain); gain.connect(audioContext.destination);
+      const now=audioContext.currentTime; gain.gain.setValueAtTime(0, now);
+      gain.gain.exponentialRampToValueAtTime(0.18, now + 0.05); gain.gain.exponentialRampToValueAtTime(0.0008, now + 2.6);
+      osc.start(now); osc.stop(now + 2.8);
+      currentOsc=osc; currentGain=gain; currentFilter=filt; setStatus('Filter demo');
     }
 
-    // Init
+    function playSynthSound(){
+      ensureAudio(); stopCurrent();
+      const osc=audioContext.createOscillator(), gain=audioContext.createGain(), filt=audioContext.createBiquadFilter();
+      osc.type=selectedWaveform; osc.frequency.value=currentFreq;
+      filt.type='lowpass'; filt.frequency.value=synthParams.synthCutoff; filt.Q.value=synthParams.synthRes;
+      osc.connect(filt); filt.connect(gain); gain.connect(audioContext.destination);
+      const now=audioContext.currentTime, len=2.6, maxG=Math.max(0.05, Math.min(0.5, synthParams.volume));
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(maxG, now + synthParams.attack);
+      gain.gain.linearRampToValueAtTime(maxG*synthParams.sustain, now + synthParams.attack + synthParams.decay);
+      gain.gain.setValueAtTime(maxG*synthParams.sustain, now + len - synthParams.release);
+      gain.gain.exponentialRampToValueAtTime(0.0008, now + len);
+      const startCut=Math.max(40, synthParams.synthCutoff*0.35), peak=synthParams.synthCutoff*(1+synthParams.envAmount);
+      filt.frequency.setValueAtTime(startCut, now);
+      filt.frequency.linearRampToValueAtTime(peak, now + synthParams.attack);
+      filt.frequency.linearRampToValueAtTime(startCut + (peak-startCut)*synthParams.sustain, now + synthParams.attack + synthParams.decay);
+      filt.frequency.setValueAtTime(startCut + (peak-startCut)*synthParams.sustain, now + len - synthParams.release);
+      filt.frequency.exponentialRampToValueAtTime(Math.max(30, startCut), now + len);
+      osc.start(now); osc.stop(now + len);
+      currentOsc=osc; currentGain=gain; currentFilter=filt; setStatus('Mini synth');
+    }
+
+    // Filter type
+    document.getElementById('filterTypeSelect').addEventListener('change', e=>{ synthParams.filterType=e.target.value; drawFilterResponse(); });
+
+    // ========= Boot =========
     window.addEventListener('DOMContentLoaded', ()=>{
       drawAll(); setStatus('Audio: idle');
-
-      ensureRotors();
-
-      // set initial knob angles
+      // Initial angle render (manager already did)
       ['attack','decay','sustain','release','cutoff','resonance','synthCutoff','synthRes','envAmount','volume']
-        .forEach(p=>{ const input=document.getElementById(p+'Knob'); if(input){ updateKnobRotation(p, input.value); }});
-
+        .forEach(p=> knobs.set(p, document.getElementById(p+'Knob') ? +document.getElementById(p+'Knob').value : 0));
       drawEnvelope(); drawFilterResponse();
-      setupKnobDragging();
     });
     window.addEventListener('resize', ()=> drawAll());
   </script>

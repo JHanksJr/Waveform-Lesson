@@ -26,11 +26,16 @@
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0;font-family:"Space Grotesk",system-ui,-apple-system,Segoi UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial; color:var(--text); background:
-      radial-gradient(1200px 600px at 10% -10%, rgba(255,122,0,.18), transparent 60%),
-      radial-gradient(900px 500px at 110% 10%, rgba(255,176,0,.12), transparent 50%),
-      linear-gradient(180deg, #0a0b0c 0%, #0f1113 100%);
-      overflow-x:hidden}
+    body{
+      margin:0;
+      font-family:"Space Grotesk",system-ui,-apple-system,Segoi UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(255,122,0,.18), transparent 60%),
+        radial-gradient(900px 500px at 110% 10%, rgba(255,176,0,.12), transparent 50%),
+        linear-gradient(180deg, #0a0b0c 0%, #0f1113 100%);
+      overflow-x:hidden
+    }
     .holo-grid{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;background-image:linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);background-size:24px 24px;mask: radial-gradient(80% 60% at 50% 40%, black 40%, transparent 100%)}
     .aurora{position:fixed;inset:-20% -20% auto -20%;height:70vh;z-index:0;filter:blur(44px);opacity:.42;background:conic-gradient(from 0deg, var(--neon-1), var(--neon-2), var(--neon-3), var(--neon-1));animation:spin 28s linear infinite;transform-origin:60% 40%;transition:opacity .3s ease}
     .aurora.paused{animation-play-state:paused;opacity:0;}
@@ -102,7 +107,7 @@
     .knob-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:18px;justify-items:center}
     .knob-group{text-align:center;color:var(--text)}
 
-    /* Potentiometer: outer shell (no transforms) */
+    /* Pot outer shell (no transforms) */
     .knob{
       width:88px;height:88px;position:relative;border-radius:50%;
       background:radial-gradient(circle, rgba(255,255,255,.12) 0%, rgba(0,0,0,.0) 65%), #0e1524;
@@ -115,7 +120,7 @@
     .knob-label{font-size:12px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
     .knob-value{font:700 12px/1 "JetBrains Mono",ui-monospace;color:var(--neon-1);background:var(--card-strong);border:1px solid var(--border);padding:6px 10px;border-radius:999px;display:inline-block;margin-top:6px;min-width:64px}
 
-    /* Inner rotor actually rotates; needle lives here */
+    /* Inner rotor rotates to indicate value */
     .knob .rotor{position:absolute;inset:0;border-radius:50%;pointer-events:none;transform:rotate(0deg)}
     .knob .rotor::before{
       content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);
@@ -144,7 +149,7 @@
       </div>
       <div></div>
       <div class="actions">
-        <button class="btn" id="themeToggle" title="Toggle visual theme">Toggle Glow</button>
+        <button class="btn" id="themeToggle" title="Toggle visual theme">Toggle Glow (ON)</button>
         <button class="btn primary" onclick="scrollToInteractive()">Try the Demo</button>
       </div>
     </header>
@@ -200,15 +205,10 @@
         <div class="oscilloscope"><canvas id="sineCanvas" class="waveform-canvas" height="180"></canvas><div class="scanline"></div></div>
         <div class="controls"><button class="btn" onclick="playWaveform('sine')">🎵 Play Sine Wave</button></div>
         <div class="char-grid">
-          <div class="char-card"><h4>🎯 Sound Character</h4><p>Pure, smooth tones. A sinewave creates the well known 808 bass. Contains only the fundamental frequency with no harmonics. In the higher pitches it is often described as "flute-like" or "whistle-like" in quality.</p></div>
-          <div class="char-card"><h4>🔬 Harmonic Content</h4><p>Contains only the fundamental frequency - no overtones or harmonics. This makes it the "purest" waveform and the mathematical foundation for all other sounds.</p></div>
-          <div class="char-card"><h4>🎹 Musical Applications</h4><p>Sub-bass frequencies, flute sounds, pure bell tones, frequency modulation (FM synthesis), and as a modulation source for other waveforms.</p></div>
-          <div class="char-card"><h4>⚡ Synthesis Use</h4><p>Perfect for FM synthesis carriers and modulators, creating sub-oscillator content, and when you need a clean, uncolored sound source.</p></div>
-        </div>
-        <div class="harmonic-content">
-          <h4>Harmonic Analysis</h4>
-          <div class="harmonic-bars"><div class="harmonic-bar" style="height:100%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:0%"></div></div>
-          <p><strong>Only the fundamental frequency is present - no harmonics!</strong></p>
+          <div class="char-card"><h4>🎯 Sound Character</h4><p>Pure, smooth tones. A sinewave creates the well known 808 bass. Contains only the fundamental frequency with no harmonics.</p></div>
+          <div class="char-card"><h4>🔬 Harmonic Content</h4><p>Only the fundamental frequency; the mathematical basis for all other sounds.</p></div>
+          <div class="char-card"><h4>🎹 Musical Applications</h4><p>Sub-bass, pure bells, FM synth carriers/modulators.</p></div>
+          <div class="char-card"><h4>⚡ Synthesis Use</h4><p>Great for clean sources or as modulators.</p></div>
         </div>
       </article>
 
@@ -217,15 +217,10 @@
         <div class="oscilloscope"><canvas id="squareCanvas" class="waveform-canvas" height="180"></canvas><div class="scanline"></div></div>
         <div class="controls"><button class="btn" onclick="playWaveform('square')">🎵 Play Square Wave</button></div>
         <div class="char-grid">
-          <div class="char-card"><h4>🎯 Sound Character</h4><p>Bold, hollow, and woody. Rich in odd harmonics, giving it a distinctive "clarinet-like" or "video game" character.</p></div>
-          <div class="char-card"><h4>🔬 Harmonic Content</h4><p>Contains odd harmonics only (1st, 3rd, 5th, 7th...).</p></div>
-          <div class="char-card"><h4>🎹 Musical Applications</h4><p>Classic video game sounds, organ-like tones, woodwind emulations, and aggressive leads.</p></div>
-          <div class="char-card"><h4>⚡ Synthesis Use</h4><p>Excellent for subtractive synthesis; low-pass to sculpt timbre.</p></div>
-        </div>
-        <div class="harmonic-content">
-          <h4>Harmonic Analysis</h4>
-          <div class="harmonic-bars"><div class="harmonic-bar" style="height:100%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:60%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:35%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:20%"></div></div>
-          <p><strong>Rich in odd harmonics.</strong></p>
+          <div class="char-card"><h4>🎯 Character</h4><p>Bold, hollow; classic retro game vibe.</p></div>
+          <div class="char-card"><h4>🔬 Harmonics</h4><p>Odd harmonics only.</p></div>
+          <div class="char-card"><h4>🎹 Uses</h4><p>Organs, leads, chiptune.</p></div>
+          <div class="char-card"><h4>⚡ Use</h4><p>Low-pass friendly, responds to filtering.</p></div>
         </div>
       </article>
 
@@ -234,15 +229,10 @@
         <div class="oscilloscope"><canvas id="sawCanvas" class="waveform-canvas" height="180"></canvas><div class="scanline"></div></div>
         <div class="controls"><button class="btn" onclick="playWaveform('sawtooth')">🎵 Play Sawtooth Wave</button></div>
         <div class="char-grid">
-          <div class="char-card"><h4>🎯 Sound Character</h4><p>Bright, buzzy, and aggressive.</p></div>
-          <div class="char-card"><h4>🔬 Harmonic Content</h4><p>All harmonics present, amplitude ~ 1/n.</p></div>
-          <div class="char-card"><h4>🎹 Applications</h4><p>Brass, leads, basses, strings.</p></div>
-          <div class="char-card"><h4>⚡ Use</h4><p>Go-to for subtractive synthesis.</p></div>
-        </div>
-        <div class="harmonic-content">
-          <h4>Harmonic Analysis</h4>
-          <div class="harmonic-bars"><div class="harmonic-bar" style="height:100%"></div><div class="harmonic-bar" style="height:50%"></div><div class="harmonic-bar" style="height:33%"></div><div class="harmonic-bar" style="height:25%"></div><div class="harmonic-bar" style="height:20%"></div><div class="harmonic-bar" style="height:16%"></div><div class="harmonic-bar" style="height:14%"></div></div>
-          <p><strong>All harmonics present.</strong></p>
+          <div class="char-card"><h4>🎯 Character</h4><p>Bright, buzzy, aggressive.</p></div>
+          <div class="char-card"><h4>🔬 Harmonics</h4><p>All harmonics present; amplitude ~ 1/n.</p></div>
+          <div class="char-card"><h4>🎹 Uses</h4><p>Brass, strings, basses, leads.</p></div>
+          <div class="char-card"><h4>⚡ Use</h4><p>Subtractive workhorse.</p></div>
         </div>
       </article>
 
@@ -251,15 +241,10 @@
         <div class="oscilloscope"><canvas id="triangleCanvas" class="waveform-canvas" height="180"></canvas><div class="scanline"></div></div>
         <div class="controls"><button class="btn" onclick="playWaveform('triangle')">🎵 Play Triangle Wave</button></div>
         <div class="char-grid">
-          <div class="char-card"><h4>🎯 Character</h4><p>Smoother than square, mellower than saw.</p></div>
-          <div class="char-card"><h4>🔬 Harmonics</h4><p>Odd only, amplitude ~ 1/n².</p></div>
+          <div class="char-card"><h4>🎯 Character</h4><p>Smoother than square; mellow.</p></div>
+          <div class="char-card"><h4>🔬 Harmonics</h4><p>Odd harmonics falling ~ 1/n².</p></div>
           <div class="char-card"><h4>🎹 Uses</h4><p>Flute-like leads, pads.</p></div>
           <div class="char-card"><h4>⚡ Use</h4><p>Between sine and square.</p></div>
-        </div>
-        <div class="harmonic-content">
-          <h4>Harmonic Analysis</h4>
-          <div class="harmonic-bars"><div class="harmonic-bar" style="height:100%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:11%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:4%"></div><div class="harmonic-bar" style="height:0%"></div><div class="harmonic-bar" style="height:2%"></div></div>
-          <p><strong>Odd harmonics only.</strong></p>
         </div>
       </article>
     </section>
@@ -349,11 +334,6 @@
       </div>
     </section>
 
-    <!-- TECHNIQUES / EXAMPLES / TIPS (unchanged copy omitted for brevity) -->
-    <section class="panel"><h3>🎛️ Synthesis Techniques Using Basic Waveforms</h3><p class="section-text">Sawtooth/Square for subtractive, Sine for FM/Additive, etc.</p></section>
-    <section class="panel"><h3>🎵 Practical Sound Design Examples</h3><p class="section-text">Brass, leads, pads, bells, retro game, bass…</p></section>
-    <section class="tips"><div class="tip"><h4>💡 Pro Tips</h4><ul><li>Test across octaves</li><li>Layer waveforms</li><li>Mind phase</li><li>Use modulation</li></ul></div></section>
-
     <section class="panel">
       <h3>🎓 Mastering Waveform Fundamentals</h3>
       <div class="section-text">
@@ -363,7 +343,7 @@
     </section>
 
     <footer>
-      <div>Tip: Press <span class="mono">1/2/3/4</span> to play Sine/Square/Saw/Triangle. Hold <span class="mono">Z</span> for ADSR Gate.</div>
+      <div>Tip: Press <span class="mono">1/2/3/4</span> to play Sine/Square/Saw/Triangle. Hold <span class="mono">Z</span> for ADSR Gate. Use <span class="mono">Shift</span> for fine knob moves; trackpad/mouse wheel works too.</div>
       <div id="status" class="mono">Audio: idle</div>
     </footer>
   </div>
@@ -646,62 +626,73 @@
       });
     }
 
-    // --- Stable potentiometer dragging (cached center + rAF) ---
+    // --- DAW-style vertical dragging + wheel nudging (rAF throttled) ---
     function setupKnobDragging(){
-      const ANG_MIN = -140, ANG_MAX = 140;
+      const ANG_MIN = -140, ANG_MAX = 140; // for the rotor display only
+      const PX_PER_FULL_RANGE = 200;       // vertical pixels to sweep min->max
+      const FINE_FACTOR = 0.2;             // shift slows to 20%
       let rafId = null;
+
+      const schedule = (fn)=>{ if(rafId!=null) return; rafId = requestAnimationFrame(()=>{ rafId=null; fn(); }); };
 
       document.querySelectorAll('.knob').forEach(knob=>{
         const input = knob.querySelector('input'); const rotor = knob.querySelector('.rotor');
         if(!input || !rotor) return;
 
-        let dragging=false, ptrId=null, cx=0, cy=0;
-        let pendingAngle=null, pendingVal=null;
-
         const min=+input.min, max=+input.max;
+        const valueToAngle = (val)=> {
+          const n = (val - min)/(max - min);
+          return ANG_MIN + n*(ANG_MAX - ANG_MIN);
+        };
+        const clamp = (v)=> Math.max(min, Math.min(max, v));
 
-        const valueToAngle = (val)=> ANG_MIN + ((val - min)/(max - min))*(ANG_MAX - ANG_MIN);
-        const angleToValue = (deg)=> {
-          const clamped = Math.max(ANG_MIN, Math.min(ANG_MAX, deg));
-          const n = (clamped - ANG_MIN) / (ANG_MAX - ANG_MIN);
-          return min + n*(max-min);
-        };
-        const angleFromEvent = (e)=> {
-          const dx = e.clientX - cx, dy = e.clientY - cy;
-          return Math.atan2(dx, -dy) * 180/Math.PI; // 0° at top, clockwise positive
-        };
-        function scheduleRender(){
-          if(rafId != null) return;
-          rafId = requestAnimationFrame(()=>{
-            rafId = null;
-            if(pendingAngle==null || pendingVal==null) return;
-            rotor.style.transform = `rotate(${pendingAngle}deg)`;
-            input.value = pendingVal;
-            updateKnob(knob.dataset.param, pendingVal); // sync rest of UI/values
-            pendingAngle = pendingVal = null;
-          });
+        let dragging=false, ptrId=null, startY=0, startVal=0;
+
+        function applyValue(v){
+          const val = clamp(v);
+          input.value = val;
+          rotor.style.transform = `rotate(${valueToAngle(val)}deg)`;
+          updateKnob(knob.dataset.param, val);
         }
 
+        // Pointer drag (vertical)
         knob.addEventListener('pointerdown', (e)=>{
           dragging=true; ptrId=e.pointerId; knob.setPointerCapture(ptrId); knob.classList.add('grabbing');
-          const rect = knob.getBoundingClientRect(); cx = rect.left + rect.width/2; cy = rect.top + rect.height/2;
-          const a = angleFromEvent(e); const v = angleToValue(a);
-          pendingAngle = valueToAngle(v); pendingVal = v; scheduleRender(); e.preventDefault();
+          startY = e.clientY;
+          startVal = +input.value;
+          e.preventDefault();
         });
         knob.addEventListener('pointermove', (e)=>{
           if(!dragging) return;
-          const a = angleFromEvent(e); const v = angleToValue(a);
-          pendingAngle = valueToAngle(v); pendingVal = v; scheduleRender();
+          const dy = startY - e.clientY; // up is positive
+          const scale = (max - min) / PX_PER_FULL_RANGE;
+          const fine = e.shiftKey ? FINE_FACTOR : 1;
+          const next = startVal + dy * scale * fine;
+          schedule(()=> applyValue(next));
         });
-        function endDrag(){ if(!dragging) return; dragging=false; knob.classList.remove('grabbing'); try{ knob.releasePointerCapture(ptrId);}catch(_){}
-          ptrId=null; }
+        function endDrag(){
+          if(!dragging) return;
+          dragging=false; knob.classList.remove('grabbing');
+          try{ knob.releasePointerCapture(ptrId);}catch(_){}
+          ptrId=null;
+        }
         knob.addEventListener('pointerup', endDrag);
         knob.addEventListener('pointercancel', endDrag);
 
-        // keep rotor synced on programmatic changes (presets/keyboard)
+        // Wheel nudging (trackpad/mouse)
+        knob.addEventListener('wheel', (e)=>{
+          e.preventDefault();
+          const delta = -e.deltaY; // up -> increase
+          const scale = (max - min) / 600; // slower for wheel
+          const fine = e.shiftKey ? FINE_FACTOR : 1;
+          const next = (+input.value) + delta * scale * fine;
+          schedule(()=> applyValue(next));
+        }, {passive:false});
+
+        // Keep rotor synced on programmatic changes (presets/sliders)
         input.addEventListener('input', ()=>{ rotor.style.transform = `rotate(${valueToAngle(+input.value)}deg)`; });
 
-        // init angle
+        // Initialize angle from current value
         rotor.style.transform = `rotate(${valueToAngle(+input.value)}deg)`;
       });
     }

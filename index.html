@@ -99,6 +99,17 @@
     /* Panels subtly brighten with audio */
     .panel{ box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(255,170,60,.06) inset,
       0 0 calc(6px + 26px * var(--glow)) rgba(255,160,60, calc(0.12 + 0.25*var(--glow))) }
+      /* === Restored sections styling === */
+    .lead{font-size:1.1em;color:var(--muted)}
+    .synthesis-section .lead,.waveform-section .lead{color:var(--muted)}
+    .technique-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .technique-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;box-shadow:var(--shadow)}
+    .examples-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .example-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;box-shadow:var(--shadow)}
+    .tip-section{display:grid;gap:16px}
+    .tip-box{background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+    /* audio‑reactive accent */
+    .technique-card,.example-card,.tip-box{box-shadow:0 0 calc(4px + 18px * var(--glow)) rgba(255,160,60, calc(0.06 + 0.2*var(--glow))) , inset 0 0 0 1px rgba(255,255,255,.02)}
   </style>
 </head>
 <body>
@@ -110,7 +121,7 @@
         <div class="brand-badge" aria-hidden="true"></div>
         <div>
           <h1>Synthesis Lab</h1>
-          <div class="subtitle">Four Basic Waveforms • Interactive guide for Digital Audio by Mr. Hanks</div>
+          <div class="subtitle">Four Basic Waveforms • Interactive guide by Mr. Hanks</div>
         </div>
       </div>
       <div></div>
@@ -223,6 +234,151 @@
         </div>
       </div>
       <div style="text-align:center;margin:18px 0"><button class="big-play-btn" id="synthPlay">🚀 Play Synthesizer</button></div>
+    </section>
+
+    <section class="panel synthesis-section">
+      <h2>Synthesis Techniques Using Basic Waveforms</h2>
+      <p class="lead">Understanding how these waveforms are used in different synthesis methods is crucial for effective sound design:</p>
+      <div class="technique-grid">
+        <article class="technique-card">
+          <h4>Subtractive Synthesis</h4>
+          <p><strong>Primary Waveforms:</strong> Sawtooth, Square</p>
+          <p>Start with harmonically rich waveforms and remove frequencies using filters. Sawtooth waves are ideal because they contain many harmonics for the filter to sculpt.</p>
+          <p><strong>Example:</strong> Sawtooth → Low‑pass filter → ADSR envelope = Classic analog lead sound</p>
+        </article>
+        <article class="technique-card">
+          <h4>FM Synthesis</h4>
+          <p><strong>Primary Waveforms:</strong> Sine waves</p>
+          <p>Use sine waves as carriers and modulators. Different ratios create families of timbres from bell‑like to metallic.</p>
+          <p><strong>Example:</strong> Sine carrier + Sine modulator at 2:1 ratio = Bell‑like tones</p>
+        </article>
+        <article class="technique-card">
+          <h4>AM Synthesis</h4>
+          <p><strong>Any waveform</strong> can be amplitude‑modulated.</p>
+          <p>Modulate the amplitude of one waveform with another. Low rates yield tremolo; audio‑rate AM creates new sidebands.</p>
+          <p><strong>Example:</strong> Sawtooth AM’d by triangle = Rhythmic, pulsing texture</p>
+        </article>
+        <article class="technique-card">
+          <h4>Additive Synthesis</h4>
+          <p><strong>Primary Waveforms:</strong> Sine waves</p>
+          <p>Build complex sounds by summing many sines at different frequencies and amplitudes—each partial adds a piece of the tone.</p>
+          <p><strong>Example:</strong> Fundamental + 3rd + 5th harmonic ≈ Square‑like tone</p>
+        </article>
+        <article class="technique-card">
+          <h4>Pulse Width Modulation</h4>
+          <p><strong>Primary Waveforms:</strong> Square‑wave variants</p>
+          <p>Vary the pulse width of a square wave to animate its harmonic content—great for strings and choruses.</p>
+          <p><strong>Example:</strong> PWM square wave = Classic analog string ensemble sound</p>
+        </article>
+        <article class="technique-card">
+          <h4>Ring Modulation</h4>
+          <p><strong>Any two waveforms</strong> can be ring‑modulated.</p>
+          <p>Multiply two signals to generate sum/difference frequencies—often inharmonic and metallic.</p>
+          <p><strong>Example:</strong> Sine × Square = Complex, inharmonic spectrum</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel examples-section">
+      <h2>Practical Sound Design Examples</h2>
+      <div class="examples-grid">
+        <article class="example-card">
+          <h4>Brass Sound</h4>
+          <p><strong>Start with:</strong> Sawtooth wave</p>
+          <p><strong>Processing:</strong></p>
+          <ul>
+            <li>Low‑pass filter with moderate resonance</li>
+            <li>Filter envelope for brightness changes</li>
+            <li>Amplitude envelope with slow attack</li>
+            <li>Add vibrato with sine‑wave modulation</li>
+          </ul>
+        </article>
+        <article class="example-card">
+          <h4>Classic Lead</h4>
+          <p><strong>Start with:</strong> Square or Sawtooth wave</p>
+          <p><strong>Processing:</strong></p>
+          <ul>
+            <li>High‑pass filter to remove mud</li>
+            <li>Low‑pass filter for tone shaping</li>
+            <li>Fast attack, moderate decay envelope</li>
+            <li>Add portamento for smooth transitions</li>
+          </ul>
+        </article>
+        <article class="example-card">
+          <h4>Bell Sound</h4>
+          <p><strong>Start with:</strong> Sine wave (FM)</p>
+          <p><strong>Processing:</strong></p>
+          <ul>
+            <li>Modulator at ~3.5:1 ratio</li>
+            <li>High modulation index for brightness</li>
+            <li>Exponential decay envelope</li>
+            <li>Add reverb for space</li>
+          </ul>
+        </article>
+        <article class="example-card">
+          <h4>Pad Sound</h4>
+          <p><strong>Start with:</strong> Multiple detuned saws</p>
+          <p><strong>Processing:</strong></p>
+          <ul>
+            <li>Low‑pass filter with low cutoff</li>
+            <li>Very slow attack envelope</li>
+            <li>Add chorus/ensemble</li>
+            <li>Layer different octaves</li>
+          </ul>
+        </article>
+        <article class="example-card">
+          <h4>Retro Game Sound</h4>
+          <p><strong>Start with:</strong> Square wave</p>
+          <p><strong>Processing:</strong></p>
+          <ul>
+            <li>Fast attack, quick decay</li>
+            <li>Pitch envelope for “blip” effect</li>
+            <li>Minimal processing for clarity</li>
+            <li>Vary pulse width for articulation</li>
+          </ul>
+        </article>
+        <article class="example-card">
+          <h4>Bass Sound</h4>
+          <p><strong>Start with:</strong> Sawtooth wave</p>
+          <p><strong>Processing:</strong></p>
+          <ul>
+            <li>Low‑pass filter with envelope modulation</li>
+            <li>Sub‑oscillator (sine, −1 octave)</li>
+            <li>Compression for punch</li>
+            <li>Short decay for percussive attack</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel tip-section">
+      <div class="tip-box">
+        <h4>Pro Tips for Waveform Selection</h4>
+        <ul>
+          <li><strong>Frequency matters:</strong> Higher notes reveal harmonics—audition across octaves.</li>
+          <li><strong>Layering power:</strong> Combine waveforms (e.g., sine + saw) for warmth.</li>
+          <li><strong>Phase relationships:</strong> Align phases when layering to avoid cancellations.</li>
+          <li><strong>Context is key:</strong> A bright saw may be perfect in a dense mix but harsh soloed.</li>
+          <li><strong>Modulation magic:</strong> Modulate parameters for evolving textures.</li>
+        </ul>
+      </div>
+      <div class="tip-box">
+        <h4>Choosing the Right Waveform</h4>
+        <ul>
+          <li><strong>Pure, clean:</strong> Sine</li>
+          <li><strong>Cut through a mix:</strong> Sawtooth or Square</li>
+          <li><strong>Vintage/retro:</strong> Square</li>
+          <li><strong>Complex filtering:</strong> Sawtooth</li>
+          <li><strong>Smooth, mellow:</strong> Triangle</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel waveform-section">
+      <h2>Mastering Waveform Fundamentals</h2>
+      <p class="lead">Understanding these four basic waveforms is like learning the alphabet of electronic music—each one is a distinct letter you can combine into words and phrases.</p>
+      <p class="lead">In modern synthesis, these waves are starting points. The magic happens when you combine oscillators, filters, envelopes, and modulation to create motion and emotion.</p>
+      <p class="lead" style="font-weight:700;color:#ffd166">Great sound design comes from knowing not just what each waveform sounds like, but <em>why</em> to choose it in context.</p>
     </section>
 
     <footer>
